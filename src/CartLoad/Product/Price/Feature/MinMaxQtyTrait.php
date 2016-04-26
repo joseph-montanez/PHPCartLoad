@@ -23,7 +23,7 @@ trait MinMaxQtyTrait {
 
 	/**
 	 * @param int $min_qty
-	 * @return Bulk
+	 * @return self
 	 */
 	public function setMinQty(int $min_qty) {
 		$this->min_qty = $min_qty;
@@ -40,7 +40,7 @@ trait MinMaxQtyTrait {
 
 	/**
 	 * @param int $max_qty
-	 * @return Bulk
+	 * @return self
 	 */
 	public function setMaxQty(int $max_qty) {
 		$this->max_qty = $max_qty;

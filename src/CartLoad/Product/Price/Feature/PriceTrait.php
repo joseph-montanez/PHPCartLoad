@@ -13,7 +13,7 @@ trait PriceTrait {
 
 	/**
 	 * @param float $price
-	 * @return Simple
+	 * @return self
 	 */
 	public function setPrice(float $price) {
 		$this->price = $price;

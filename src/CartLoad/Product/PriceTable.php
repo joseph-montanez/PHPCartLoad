@@ -45,18 +45,15 @@ class PriceTable {
         }
 
         $price_list = array_reduce($this->prices, function ($result, $price) use ($qty, $now) {
-            $is_qty = $price instanceof MinMaxQtyInterface;
-            $is_date = $price instanceof MinMaxDateInterface;
-
-            if ($is_date && $is_qty && $price->inMinMaxDateRange($now) && $price->inMinMaxQtyRange($qty)) {
+            if ($price instanceof MinMaxDateInterface && $price instanceof MinMaxQtyInterface && $price->inMinMaxDateRange($now) && $price->inMinMaxQtyRange($qty)) {
                 $result [] = $price;
             }
             //-- There is no qty range, but there is a date range to compare the date
-            else if ($is_date && !$is_qty && $price->inMinMaxDateRange($now)) {
+            else if ($price instanceof MinMaxDateInterface && !$price instanceof MinMaxQtyInterface && $price->inMinMaxDateRange($now)) {
                 $result [] = $price;
             }
             //-- There is no date or qty range, to compare so just assume its a valid price to return
-            else if (!$is_date && !$is_qty) {
+            else if (!$price instanceof MinMaxDateInterface && !$price instanceof MinMaxQtyInterface) {
                 $result [] = $price;
             }
 
