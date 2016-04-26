@@ -15,5 +15,8 @@ before_script:
   - composer install --prefer-source --no-interaction --dev
   - ./vendor/bin/codecept build
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 script:
   - ./vendor/bin/codecept run unit
