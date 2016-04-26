@@ -7,6 +7,9 @@ branches:
   except:
     - gh-pages
 
+install:
+  - composer install
+
 before_script:
   - ./vendor/bin/codecept build
 
