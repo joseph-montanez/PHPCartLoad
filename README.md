@@ -1,4 +1,4 @@
-# PHPCartLoad #
+# PHPCartLoad [![Build Status](https://travis-ci.org/joseph-montanez/phpflo.svg?branch=master)](https://travis-ci.org/joseph-montanez/phpflo) #
 
 PHPCartLoad is a library intended to help build shopping carts and general e-commerce applications. This library is intended to provide a foundation of easy to use classes to manage inventory pricing and carts.
 
