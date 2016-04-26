@@ -1,0 +1,24 @@
+{
+  "name": "joseph-montanez/phpcartload",
+  "description": "Standalone shopping cart",
+  "minimum-stability": "dev",
+  "license": "AGPL-3.0",
+  "authors": [
+    {
+      "name": "Joseph Montanez",
+      "email": "jm@shabb.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "codeception/codeception": "2.2.0-beta"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "CartLoad\\": "src/CartLoad"
+    }
+  }
+}
