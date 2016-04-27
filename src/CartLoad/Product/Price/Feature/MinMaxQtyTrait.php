@@ -92,10 +92,7 @@ trait MinMaxQtyTrait {
         $min_qty = $this->getMinQty();
         $max_qty = $this->getMaxQty();
 
-        if ($no_min_limit && $no_max_limit) {
-            return TRUE;
-        }
-        else if ($no_min_limit && !$no_max_limit && $qty <= $max_qty) {
+        if ($no_min_limit && !$no_max_limit && $qty <= $max_qty) {
             return TRUE;
         }
         else if (!$no_min_limit && $no_max_limit && $qty >= $min_qty) {

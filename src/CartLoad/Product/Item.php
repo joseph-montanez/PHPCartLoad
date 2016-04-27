@@ -131,10 +131,11 @@ class Item {
 
     /**
      * @param $qty
+     * @param \DateTime $date
      * @return PriceInterface|null
      */
-    public function getPrice($qty) {
-        $prices = $this->getPriceTable()->getPrices($qty);
+    public function getPrice($qty, \DateTime $date = null) {
+        $prices = $this->getPriceTable()->getPrices($qty, $date);
         return current($prices);
     }
 }

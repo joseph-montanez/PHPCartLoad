@@ -43,8 +43,8 @@ You can also expand on pricing to include bulk pricing, again keeping with somet
         'name' => 'Apple',
         'sku' => 'a',
         'price' => [
-            19.95,
-            ['minQty' => 10, 'price' => 14.95],
+            ['min_qty' => 1, 'max_qty' => 9, 'price' => 19.95],
+            ['min_qty' => 10, 'price' => 14.95],
         ]
     ]);
 

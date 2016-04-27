@@ -33,6 +33,7 @@ class Bulk implements PriceInterface, MinMaxQtyInterface, MinMaxDateInterface {
                 $this->setNoMinimumQtyLimit(true);
             } else {
                 $this->setMinQty((int) $price['min_qty']);
+                $this->setNoMinimumQtyLimit(false);
             }
         } else {
             $this->setNoMinimumQtyLimit(true);
@@ -41,7 +42,8 @@ class Bulk implements PriceInterface, MinMaxQtyInterface, MinMaxDateInterface {
             if ($price['max_qty'] === -1 || $price['max_qty'] === false || $price['max_qty'] === null) {
                 $this->setNoMaximumQtyLimit(true);
             } else {
-                $this->setMinQty((int) $price['max_qty']);
+                $this->setMaxQty((int) $price['max_qty']);
+                $this->setNoMaximumQtyLimit(false);
             }
         } else {
             $this->setNoMaximumQtyLimit(true);
@@ -54,6 +56,7 @@ class Bulk implements PriceInterface, MinMaxQtyInterface, MinMaxDateInterface {
                 $this->setNoMinimumDateLimit(true);
             } else {
                 $this->setMinDate(new \DateTime($price['min_date']));
+                $this->setNoMinimumDateLimit(false);
             }
         } else {
             $this->setNoMinimumDateLimit(true);
@@ -64,6 +67,7 @@ class Bulk implements PriceInterface, MinMaxQtyInterface, MinMaxDateInterface {
                 $this->setNoMaximumDateLimit(true);
             } else {
                 $this->setMaxDate(new \DateTime($price['max_date']));
+                $this->setNoMaximumDateLimit(false);
             }
         } else {
             $this->setNoMaximumDateLimit(true);

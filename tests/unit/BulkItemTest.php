@@ -25,7 +25,7 @@ class BulkItemTest extends \Codeception\Test\Unit
             'name' => 'Apple',
             'sku' => 'a',
             'price' => [
-                19.95,
+                ['Bulk' => ['min_qty' => 1, 'max_qty' => 9, 'price' => 19.95]],
                 ['Bulk' => ['min_qty' => 10, 'price' => 14.95]],
             ]
         ]);
@@ -44,8 +44,8 @@ class BulkItemTest extends \Codeception\Test\Unit
             'name' => 'Apple',
             'sku' => 'a',
             'price' => [
-                19.95,
-                ['min_qty' => 10, 'price' => 14.95],
+               ['min_qty' => 1, 'max_qty' => 9, 'price' => 19.95],
+               ['min_qty' => 10, 'price' => 14.95],
             ]
         ]);
 
@@ -71,6 +71,27 @@ class BulkItemTest extends \Codeception\Test\Unit
         $qty = 10;
 
         $this->assertEquals(14.95, $apple->getPrice($qty)->getPrice());
+
+    }
+
+    /**
+     * Test to see if a date range was added that the new price works, this could be for a holiday special
+     */
+    public function testBulkPricingDateRange()
+    {
+        $apple = new Item([
+            'name' => 'Apple',
+            'sku' => 'a',
+            'price' => [
+                ['min_qty' => 1, 'max_qty' => 9, 'price' => 14.95],
+                ['min_qty' => 10, 'max_qty' => 19, 'price' => 13.95],
+                ['min_date' => '2016-01-01', 'max_date' => '2016-01-10', 'min_qty' => 10, 'max_qty' => 19, 'price' => 11.95],
+            ]
+        ]);
+
+        $this->assertEquals(14.95, $apple->getPrice(2)->getPrice());
+        $this->assertEquals(13.95, $apple->getPrice(11)->getPrice());
+        $this->assertEquals(11.95, $apple->getPrice(11, new \DateTime('2016-01-05'))->getPrice());
 
     }
 }
