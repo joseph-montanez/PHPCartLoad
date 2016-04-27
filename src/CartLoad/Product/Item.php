@@ -108,6 +108,9 @@ class Item {
     public function fromArray(array $data) {
         foreach ($data as $key => $value) {
             switch ($key) {
+                case 'id':
+                    $this->setId($value);
+                    break;
                 case 'name':
                     $this->setName($value);
                     break;
