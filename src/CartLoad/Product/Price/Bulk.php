@@ -27,7 +27,7 @@ class Bulk implements PriceInterface, MinMaxQtyInterface, MinMaxDateInterface {
         return $this;
     }
 
-    private function minMaxQtyFromArray($price) {
+    public function minMaxQtyFromArray($price) {
         if (isset($price['min_qty'])) {
             if ($price['min_qty'] === -1 || $price['min_qty'] === false || $price['min_qty'] === null) {
                 $this->setNoMinimumQtyLimit(true);
@@ -50,7 +50,7 @@ class Bulk implements PriceInterface, MinMaxQtyInterface, MinMaxDateInterface {
         }
     }
 
-    private function minMaxDateFromArray($price) {
+    public function minMaxDateFromArray($price) {
         if (isset($price['min_date'])) {
             if ($price['min_date'] === -1 || $price['min_date'] === false || $price['min_date'] === null) {
                 $this->setNoMinimumDateLimit(true);

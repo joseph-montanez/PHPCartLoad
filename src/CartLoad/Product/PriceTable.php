@@ -160,8 +160,11 @@ class PriceTable {
                         $this->addPrice((new Bulk())->fromArray($price_value));
                     }
                     else {
-                        //--TODO: Support Custom Classes, than fall back to bulk pricing
-                        $this->addPrice((new Bulk())->fromArray($price));
+                        if (class_exists($price_type)) {
+                            $this->addPrice((new $price_type())->fromArray($price[$price_type]));
+                        } else {
+                            $this->addPrice((new Bulk())->fromArray($price));
+                        }
                     }
                 }
             }

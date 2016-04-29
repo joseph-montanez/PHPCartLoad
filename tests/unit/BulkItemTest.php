@@ -94,4 +94,33 @@ class BulkItemTest extends \Codeception\Test\Unit
         $this->assertEquals(11.95, $apple->getPrice(11, new \DateTime('2016-01-05'))->getPrice());
 
     }
+
+    public function testCustomBulkPrice()
+    {
+        $apple = new Item([
+            'name' => 'Apple',
+            'sku' => 'a',
+            'price' => [
+                ['CustomBulk' => ['min_qty' => 1, 'max_qty' => 9, 'price' => 4.95]],
+                ['CustomBulk' => ['min_qty' => 10, 'max_qty' => 19, 'price' => 3.95]],
+            ]
+        ]);
+
+        $this->assertEquals(14.95, $apple->getPrice(6)->getPrice());
+        $this->assertEquals(13.95, $apple->getPrice(11)->getPrice());
+    }
+}
+
+class CustomBulk extends \CartLoad\Product\Price\Bulk {
+    /**
+     * @var float
+     */
+    protected $basePrice = 10.00;
+
+    /**
+     * @return float
+     */
+    public function getPrice() {
+        return $this->basePrice + $this->price;
+    }
 }
