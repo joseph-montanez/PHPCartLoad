@@ -33,7 +33,8 @@ class MinMaxQtyTest extends \Codeception\Test\Unit {
         $bulkPrice->setNoMaximumQtyLimit(TRUE);
         $bulkPrice->setNoMinimumQtyLimit(TRUE);
 
-        $this->assertEquals(TRUE, $bulkPrice->inMinMaxQtyRange($qty));
+        //-- TODO: this should throw an exception, you cannot have no min and no max
+        $this->assertEquals(FALSE, $bulkPrice->inMinMaxQtyRange($qty));
     }
 
     public function testNoMaxQty() {

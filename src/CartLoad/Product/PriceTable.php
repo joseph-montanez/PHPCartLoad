@@ -15,11 +15,56 @@ class PriceTable {
     protected $prices;
 
     /**
+     * If this will allow multiple prices to be returned or not
+     * @var bool $undefined_behavior
+     */
+    protected $undefined_behavior;
+
+    /**
+     * Set of methods that return true or false for a price match
+     * @var array
+     */
+    protected $qualifiers;
+
+    /**
      * PriceTable constructor.
      * @param PriceInterface[] $prices
      */
-    public function  __construct(array $prices = []) {
+    public function  __construct(array $prices = [])
+    {
         $this->prices = $prices;
+        $this->setUndefinedBehavior(false);
+        $this->qualifiers = [];
+        $this->addDefaultQualifiers();
+    }
+
+    /**
+     * Adds the default price qualifiers
+     */
+    public function addDefaultQualifiers()
+    {
+        $this->addQualifier(function ($price, $args) {
+            list($qty, $now) = $args;
+
+            return $price instanceof MinMaxDateInterface && $price->inMinMaxDateRange($now);
+        });
+
+        $this->addQualifier(function ($price, $args) {
+            list($qty, $now) = $args;
+
+            return $price instanceof MinMaxQtyInterface && $price->inMinMaxQtyRange($qty);
+        });
+
+        $this->addQualifier(function ($price, $args) {
+            return !$price instanceof MinMaxDateInterface && !$price instanceof MinMaxQtyInterface;
+        });
+    }
+
+    /**
+     * @param $fn Adds a function to the list of qualifiers of a price
+     */
+    public function addQualifier($fn) {
+        $this->qualifiers [] = $fn;
     }
 
     /**
@@ -31,7 +76,27 @@ class PriceTable {
     }
 
     /**
-     * Return a list of prices that match the quantity and date. This will return multiple prices so that a developer
+     * @return bool
+     */
+    public function getUndefinedBehavior()
+    {
+        return $this->undefined_behavior;
+    }
+
+    /**
+     * @param bool $undefined_behavior
+     * @return PriceTable
+     */
+    public function setUndefinedBehavior(bool $undefined_behavior)
+    {
+        $this->undefined_behavior = $undefined_behavior;
+        return $this;
+    }
+
+
+
+    /**
+     * Return a list of prices that match the quantity and date. This will return multiple prices, if undefined debavori so that a developer
      * layer the results, so if they want to implement member based pricing, the existing code here can be used, and
      * they will filter the results. So either extend this class and override this method, or not.
      *
@@ -44,30 +109,35 @@ class PriceTable {
             $now = new \DateTime();
         }
 
-        $price_list = array_reduce($this->prices, function ($result, $price) use ($qty, $now) {
-            if ($price instanceof MinMaxDateInterface && $price instanceof MinMaxQtyInterface && $price->inMinMaxDateRange($now) && $price->inMinMaxQtyRange($qty)) {
-                $result [] = $price;
-            }
-            //-- There is no qty range, but there is a date range to compare the date
-            else if ($price instanceof MinMaxDateInterface && !$price instanceof MinMaxQtyInterface && $price->inMinMaxDateRange($now)) {
-                $result [] = $price;
-            }
-            //-- There is no date or qty range, to compare so just assume its a valid price to return
-            else if (!$price instanceof MinMaxDateInterface && !$price instanceof MinMaxQtyInterface) {
-                $result [] = $price;
+        $params = func_get_args();
+
+        $price_list = array_reduce($this->prices, function ($result, $price) use ($params) {
+            $matches = array_reduce($this->qualifiers, function ($result, $qualifier) use ($price, $params) {
+                return $qualifier($price, $params) ? $result + 1 : $result;
+            });
+
+            if ($matches > 0) {
+                $result [] = ['matches' => $matches, 'price' => $price];
             }
 
             return $result;
         }, []);
 
-        //-- If there are multiple prices then no need have simple pricing involved
-        if (count($price_list) > 1) {
-            $price_list = array_values(array_filter($price_list, function (PriceInterface $price) {
-                return !($price instanceOf Simple);
-            }));
+        if (!$this->undefined_behavior) {
+            $price_list = array_reduce($price_list, function ($result, $price) {
+                if (count($result) === 0) {
+                    $result = [$price];
+                } else if ($price['matches'] > $result[0]['matches']) {
+                    $result = [$price];
+                }
+
+                return $result;
+            }, []);
         }
 
-        return $price_list;
+        return array_map(function ($result) {
+            return $result['price'];
+        }, $price_list);
     }
 
     /**

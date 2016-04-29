@@ -92,10 +92,7 @@ trait MinMaxDateTrait {
         $min_date = $this->getMinDate();
         $max_date = $this->getMaxDate();
 
-        if ($no_min_limit && $no_max_limit) {
-            return TRUE;
-        }
-        else if ($no_min_limit && !$no_max_limit && $now <= $max_date) {
+        if ($no_min_limit && !$no_max_limit && $now <= $max_date) {
             return TRUE;
         }
         else if (!$no_min_limit && $no_max_limit && $now >= $min_date) {

@@ -36,7 +36,8 @@ class MinMaxDateTest extends \Codeception\Test\Unit {
         $bulkPrice->setNoMaximumDateLimit(TRUE);
         $bulkPrice->setNoMinimumDateLimit(TRUE);
 
-        $this->assertEquals(TRUE, $bulkPrice->inMinMaxDateRange($now_date));
+        //-- TODO: this should throw an exception, you cannot have no min and no max
+        $this->assertEquals(FALSE, $bulkPrice->inMinMaxDateRange($now_date));
     }
 
     public function testNoMaxDate() {

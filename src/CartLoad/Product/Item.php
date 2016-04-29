@@ -108,6 +108,9 @@ class Item {
     public function fromArray(array $data) {
         foreach ($data as $key => $value) {
             switch ($key) {
+                case 'id':
+                    $this->setId($value);
+                    break;
                 case 'name':
                     $this->setName($value);
                     break;
@@ -128,10 +131,11 @@ class Item {
 
     /**
      * @param $qty
+     * @param \DateTime $date
      * @return PriceInterface|null
      */
-    public function getPrice($qty) {
-        $prices = $this->getPriceTable()->getPrices($qty);
+    public function getPrice($qty, \DateTime $date = null) {
+        $prices = $this->getPriceTable()->getPrices($qty, $date);
         return current($prices);
     }
 }
