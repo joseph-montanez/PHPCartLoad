@@ -8,8 +8,8 @@ $apple = new Item([
     'name' => 'Apple',
     'sku' => 'a',
     'price' => [
-        19.95,
-        ['minQty' => 10, 'price' => 14.95],
+        ['min_qty' => 1, 'max_qty' => 9, 'price' => 19.95],
+        ['min_qty' => 10, 'price' => 14.95],
     ]
 ]);
 
