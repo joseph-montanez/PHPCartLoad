@@ -2,14 +2,22 @@
 
 use CartLoad\Product\Option\Feature\SkuInterface;
 use CartLoad\Product\Option\Feature\SkuTrait;
+use CartLoad\Product\Price\Feature\PriceInterface;
+use CartLoad\Product\Price\Feature\PriceTrait;
 
-class Item implements SkuInterface {
-    use SkuTrait;
+class Item implements SkuInterface, PriceInterface {
+    use SkuTrait, PriceTrait;
 
     protected $id;
     protected $name;
     protected $required;
     protected $order;
+
+    public function __construct(array $data = []) {
+        if (count($data) > 0) {
+            $this->fromArray($data);
+        }
+    }
     
     /**
      * @return mixed
@@ -78,6 +86,56 @@ class Item implements SkuInterface {
         
         return $this;
     }
-    
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function fromArray($value) {
+        if (isset($value['id'])) {
+            $this->setId($value['id']);
+        }
+        if (isset($value['name'])) {
+            $this->setName($value['name']);
+        }
+        if (isset($value['required'])) {
+            $this->setRequired($value['required']);
+        }
+        if (isset($value['order'])) {
+            $this->setOrder($value['order']);
+        }
+        if (isset($value['price'])) {
+            $this->setPrice($value['price']);
+        }
+        if (isset($value['price_effect'])) {
+            $this->setPriceEffect($value['price_effect']);
+        } else {
+            $this->setPriceEffect(PriceInterface::PRICE_COMBINE);
+        }
+        if (isset($value['items'])) {
+            $this->setItems(array_map(function ($item) {
+                return new Item($item);
+            }, $value['items']));
+        }
+        if (isset($value['sku'])) {
+            if (is_object($value['sku'])) {
+                if (isset($value['sku']['sku'])) {
+                    $this->setSku($value['sku']['sku']);
+                }
+                if (isset($value['sku']['delimiter'])) {
+                    $this->setSkuDelimiter($value['sku']['delimiter']);
+                }
+                if (isset($value['sku']['effect'])) {
+                    $this->setSkuEffect($value['sku']['effect']);
+                }
+            } else {
+                $this->setSku($value['sku']);
+                $this->setSkuDelimiter('-');
+                $this->setSkuEffect(SkuInterface::SKU_AFTER);
+            }
+        }
+
+        return $this;
+    }
     
 }

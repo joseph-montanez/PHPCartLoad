@@ -17,4 +17,4 @@ $qty = 10;
 
 
 //-- This will return the simple price: 14.95
-var_dump($apple->getPrice($qty)->getPrice());
+var_dump($apple->getPrice($qty));

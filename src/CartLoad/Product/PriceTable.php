@@ -33,7 +33,7 @@ class PriceTable {
     public function  __construct(array $prices = [])
     {
         $this->prices = $prices;
-        $this->setUndefinedBehavior(false);
+        $this->setUndefinedBehavior(FALSE);
         $this->qualifiers = [];
         $this->addDefaultQualifiers();
     }
@@ -61,7 +61,7 @@ class PriceTable {
     }
 
     /**
-     * @param $fn Adds a function to the list of qualifiers of a price
+     * @param $fn callable Adds a function to the list of qualifiers of a price
      */
     public function addQualifier($fn) {
         $this->qualifiers [] = $fn;
@@ -100,11 +100,16 @@ class PriceTable {
      * layer the results, so if they want to implement member based pricing, the existing code here can be used, and
      * they will filter the results. So either extend this class and override this method, or not.
      *
-     * @param int $qty
+     * @param int|\CartLoad\Cart\Item $qty
      * @param \DateTime|NULL $now
      * @return PriceInterface[]
      */
-    public function getPrices(int $qty, \DateTime $now = NULL) {
+    public function getPrices($qty, \DateTime $now = NULL) {
+        if (is_object($qty) && $qty instanceof \CartLoad\Cart\Item) {
+            $item = $qty;
+            $qty = $item->getQty();
+        }
+
         if ($now === NULL) {
             $now = new \DateTime();
         }

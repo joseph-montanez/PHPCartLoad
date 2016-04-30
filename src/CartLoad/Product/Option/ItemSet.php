@@ -1,7 +1,8 @@
 <?php namespace CartLoad\Product\Option;
 
-
 use CartLoad\Product\Option\Feature\SkuInterface;
+use CartLoad\Product\Option\Feature\SkuTrait;
+use CartLoad\Product\Price\Feature\PriceInterface;
 
 class ItemSet implements SkuInterface {
     use SkuTrait;
@@ -10,6 +11,13 @@ class ItemSet implements SkuInterface {
     protected $name;
     protected $required;
     protected $order;
+
+    public function __construct(array $data = []) {
+        if (count($data) > 0) {
+            $this->fromArray($data);
+        }
+    }
+
     /**
      * @var Item[]
      */
@@ -83,4 +91,104 @@ class ItemSet implements SkuInterface {
         return $this;
     }
 
+    /**
+     * @return Item[]
+     */
+    public function getItems() {
+        return $this->items;
+    }
+
+    /**
+     * @param Item[] $items
+     * @return ItemSet
+     */
+    public function setItems($items) {
+        $this->items = $items;
+
+        return $this;
+    }
+
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function fromArray($value) {
+        if (isset($value['id'])) {
+            $this->setId($value['id']);
+        }
+        if (isset($value['name'])) {
+            $this->setName($value['name']);
+        }
+        if (isset($value['required'])) {
+            $this->setRequired($value['required']);
+        }
+        if (isset($value['order'])) {
+            $this->setOrder($value['order']);
+        }
+        if (isset($value['items'])) {
+            $items = array_map(function ($item) {
+                return new Item($item);
+            }, $value['items']);
+            $this->setItems($items);
+        }
+        if (isset($value['sku'])) {
+            if (is_object($value['sku'])) {
+                if (isset($value['sku']['sku'])) {
+                    $this->setSku($value['sku']['sku']);
+                }
+                if (isset($value['sku']['delimiter'])) {
+                    $this->setSkuDelimiter($value['sku']['delimiter']);
+                }
+                if (isset($value['sku']['effect'])) {
+                    $this->setSkuEffect($value['sku']['effect']);
+                }
+            } else {
+                $this->setSku($value['sku']);
+                $this->setSkuDelimiter('-');
+                $this->setSkuEffect(SkuInterface::SKU_AFTER);
+            }
+        }
+
+        return $this;
+    }
+    
+    /**
+     * @param $qty
+     * @param \DateTime|NULL $now
+     * @return array
+     */
+    public function calculatePrice($qty, \DateTime $now = null) {
+        if ($now === NULL) {
+            $now = new \DateTime();
+        }
+
+        if (is_object($qty) && $qty instanceof \CartLoad\Cart\Item) {
+            $cart_item = $qty;
+            $qty = $cart_item->getQty();
+            $option_ids = $cart_item->getOptions();
+    
+            $prices = [
+                'replaces' => [],
+                'combines' => [],
+            ];
+
+            foreach ($this->getItems() as $item) {
+                foreach ($option_ids as $option_id) {
+                    if ($item->getId() == $option_id) {
+                        if ($item->getPriceEffect() === PriceInterface::PRICE_COMBINE) {
+                            $prices['combines'] []= $item->getPrice();
+                        }
+                        else if ($item->getPriceEffect() === PriceInterface::PRICE_REPLACE_ALL) {
+                            $prices['replaces'] []= $item->getPrice();
+                        }
+                    }
+                }
+            }
+
+            return $prices;
+        }
+
+        return [];
+    }
 }

@@ -23,7 +23,7 @@ trait SkuTrait {
     
     /**
      * @param string $sku
-     * @return Item
+     * @return self
      */
     public function setSku($sku) {
         $this->sku = $sku;
@@ -40,7 +40,7 @@ trait SkuTrait {
     
     /**
      * @param mixed $sku_delimiter
-     * @return Item
+     * @return self
      */
     public function setSkuDelimiter($sku_delimiter) {
         $this->sku_delimiter = $sku_delimiter;
@@ -57,7 +57,7 @@ trait SkuTrait {
     
     /**
      * @param mixed $sku_effect
-     * @return Item
+     * @return self
      */
     public function setSkuEffect($sku_effect) {
         $this->sku_effect = $sku_effect;

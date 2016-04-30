@@ -40,7 +40,7 @@ class ItemAssignmentTest extends \Codeception\Test\Unit
         $this->assertEquals($sku, $item->getSku());
         $this->assertEquals($name, $item->getName());
         $this->assertEquals($desc, $item->getDescription());
-        $this->assertEquals($price, $item->getPrice(1)->getPrice());
+        $this->assertEquals($price, $item->getPrice(1));
 
         $item->setName('Banana');
         $this->assertEquals('Banana', $item->getName());

@@ -34,7 +34,7 @@ class BulkItemTest extends \Codeception\Test\Unit
 
 
         //-- This will return the simple price: 14.95
-        $this->assertEquals(14.95, $apple->getPrice($qty)->getPrice());
+        $this->assertEquals(14.95, $apple->getPrice($qty));
 
     }
 
@@ -53,7 +53,7 @@ class BulkItemTest extends \Codeception\Test\Unit
 
 
         //-- This will return the simple price: 14.95
-        $this->assertEquals(14.95, $apple->getPrice($qty)->getPrice());
+        $this->assertEquals(14.95, $apple->getPrice($qty));
 
     }
 
@@ -70,7 +70,7 @@ class BulkItemTest extends \Codeception\Test\Unit
 
         $qty = 10;
 
-        $this->assertEquals(14.95, $apple->getPrice($qty)->getPrice());
+        $this->assertEquals(14.95, $apple->getPrice($qty));
 
     }
 
@@ -89,9 +89,9 @@ class BulkItemTest extends \Codeception\Test\Unit
             ]
         ]);
 
-        $this->assertEquals(14.95, $apple->getPrice(2)->getPrice());
-        $this->assertEquals(13.95, $apple->getPrice(11)->getPrice());
-        $this->assertEquals(11.95, $apple->getPrice(11, new \DateTime('2016-01-05'))->getPrice());
+        $this->assertEquals(14.95, $apple->getPrice(2));
+        $this->assertEquals(13.95, $apple->getPrice(11));
+        $this->assertEquals(11.95, $apple->getPrice(11, new \DateTime('2016-01-05')));
 
     }
 
@@ -106,8 +106,8 @@ class BulkItemTest extends \Codeception\Test\Unit
             ]
         ]);
 
-        $this->assertEquals(14.95, $apple->getPrice(6)->getPrice());
-        $this->assertEquals(13.95, $apple->getPrice(11)->getPrice());
+        $this->assertEquals(14.95, $apple->getPrice(6));
+        $this->assertEquals(13.95, $apple->getPrice(11));
     }
 }
 

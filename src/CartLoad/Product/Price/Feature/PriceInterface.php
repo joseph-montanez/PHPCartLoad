@@ -2,6 +2,9 @@
 
 
 interface PriceInterface {
+    const PRICE_REPLACE_ALL = 0;
+    const PRICE_COMBINE = 1;
+    
     /**
      * @return float
      */

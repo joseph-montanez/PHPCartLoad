@@ -26,8 +26,8 @@ class OptionsTest extends \Codeception\Test\Unit
             'name' => 'Shirt',
             'sku' => 'shirt',
             'price' => [
-                ['CustomBulk' => ['min_qty' => 1, 'max_qty' => 9, 'price' => 4.95]],
-                ['CustomBulk' => ['min_qty' => 10, 'max_qty' => 19, 'price' => 3.95]],
+                ['min_qty' => 1, 'max_qty' => 9, 'price' => 4.95],
+                ['min_qty' => 10, 'max_qty' => 19, 'price' => 3.95],
             ],
             'options' => [
                 [
@@ -54,14 +54,14 @@ class OptionsTest extends \Codeception\Test\Unit
         ]);
 
         //-- Blue Medium Shirt
-        $cartItem = new CartLoad\Cart\Item([
-            'id' => 1,
+        $cartItem = new \CartLoad\Cart\Item([
+            'id'         => 1,
             'product_id' => 1, //Shirt product ID
-            'qty' => 3,
-            'options' => [2, 5] // Blue, Medium
+            'qty'        => 1,
+            'options'    => [2, 5] // Blue, Medium
         ]);
 
-        $shirt->getPrice($cartItem);
+        $this->assertEquals(4.95 + 0.4 + 1.1, $shirt->getPrice($cartItem));
 
     }
 }

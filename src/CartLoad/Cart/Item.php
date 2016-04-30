@@ -19,6 +19,12 @@ class Item {
      */
     protected $options;
 
+    public function __construct(array $data = []) {
+        if ($data !== null && is_array($data)) {
+            $this->fromArray($data);
+        }
+    }
+
     /**
      * @return mixed
      */
@@ -106,7 +112,7 @@ class Item {
             $this->setQty($data['qty']);
         }
         if (isset($data['options'])) {
-            $this->setOptions($data['options'];
+            $this->setOptions($data['options']);
         }
 
         return $this;

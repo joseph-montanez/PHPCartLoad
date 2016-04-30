@@ -28,7 +28,7 @@ This is the Hello World of this library, showing you how little you have to do t
     $qty = 10;
 
     //-- This will return the simple price: 19.95
-    var_dump($apple->getPrice($qty)->getPrice());
+    var_dump($apple->getPrice($qty));
 
 ### Bulk Pricing
 
@@ -51,5 +51,5 @@ You can also expand on pricing to include bulk pricing, again keeping with somet
     $qty = 10;
 
     //-- This will return the simple price: 14.95
-    var_dump($apple->getPrice($qty)->getPrice());
+    var_dump($apple->getPrice($qty));
 
