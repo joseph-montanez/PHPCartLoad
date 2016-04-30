@@ -136,6 +136,16 @@ class Item {
      */
     public function getPrice($qty, \DateTime $date = null) {
         $prices = $this->getPriceTable()->getPrices($qty, $date);
-        return current($prices);
+
+        if (count($prices) > 0) {
+            $price = current($prices);
+            if ($price instanceof PriceInterface) {
+                return $price->getPrice();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }
