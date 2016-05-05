@@ -59,7 +59,7 @@ trait MinMaxDateTrait {
      * @param boolean $no_minimum_date_limit
      * @return self
      */
-    public function setNoMinimumDateLimit(bool $no_minimum_date_limit) {
+    public function setNoMinimumDateLimit($no_minimum_date_limit) {
         $this->no_minimum_date_limit = $no_minimum_date_limit;
         
         return $this;
@@ -76,7 +76,7 @@ trait MinMaxDateTrait {
      * @param boolean $no_maximum_date_limit
      * @return self
      */
-    public function setNoMaximumDateLimit(bool $no_maximum_date_limit) {
+    public function setNoMaximumDateLimit($no_maximum_date_limit) {
         $this->no_maximum_date_limit = $no_maximum_date_limit;
         
         return $this;

@@ -87,7 +87,7 @@ class PriceTable {
      * @param bool $undefined_behavior
      * @return PriceTable
      */
-    public function setUndefinedBehavior(bool $undefined_behavior)
+    public function setUndefinedBehavior($undefined_behavior)
     {
         $this->undefined_behavior = $undefined_behavior;
         return $this;
@@ -105,16 +105,17 @@ class PriceTable {
      * @return PriceInterface[]
      */
     public function getPrices($qty, \DateTime $now = NULL) {
+        if ($now === NULL) {
+            $now = new \DateTime();
+        }
+
         if (is_object($qty) && $qty instanceof \CartLoad\Cart\Item) {
             $item = $qty;
             $qty = $item->getQty();
         }
 
-        if ($now === NULL) {
-            $now = new \DateTime();
-        }
-
         $params = func_get_args();
+        $params[1] = $now;
 
         $price_list = array_reduce($this->prices, function ($result, $price) use ($params) {
             $matches = array_reduce($this->qualifiers, function ($result, $qualifier) use ($price, $params) {

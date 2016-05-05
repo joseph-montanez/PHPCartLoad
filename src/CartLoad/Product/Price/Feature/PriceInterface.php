@@ -14,5 +14,5 @@ interface PriceInterface {
      * @param float $price
      * @return self
      */
-    public function setPrice(float $price);
+    public function setPrice($price);
 }

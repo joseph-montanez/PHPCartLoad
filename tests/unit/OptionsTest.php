@@ -60,8 +60,9 @@ class OptionsTest extends \Codeception\Test\Unit
             'qty'        => 1,
             'options'    => [2, 5] // Blue, Medium
         ]);
-
+    
         $this->assertEquals(4.95 + 0.4 + 1.1, $shirt->getPrice($cartItem));
+        $this->assertEquals('shirt-b-m', $shirt->getSku($cartItem));
 
     }
 }

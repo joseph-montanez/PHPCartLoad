@@ -146,7 +146,7 @@ class ItemSet implements SkuInterface {
             } else {
                 $this->setSku($value['sku']);
                 $this->setSkuDelimiter('-');
-                $this->setSkuEffect(SkuInterface::SKU_AFTER);
+                $this->setSkuEffect(SkuInterface::SKU_END_OF);
             }
         }
 
@@ -190,5 +190,57 @@ class ItemSet implements SkuInterface {
         }
 
         return [];
+    }
+    
+    public function calculateSkus($qty, \DateTime $now = null) {
+        if ($now === NULL) {
+            $now = new \DateTime();
+        }
+
+        if (is_object($qty) && $qty instanceof \CartLoad\Cart\Item) {
+            $cart_item = $qty;
+            $qty = $cart_item->getQty();
+            $option_ids = $cart_item->getOptions();
+
+            $skus = [
+                'replaces' => [],
+                'starts' => [],
+                'ends' => [],
+            ];
+
+            foreach ($this->getItems() as $item) {
+                foreach ($option_ids as $option_id) {
+                    if ($item->getId() == $option_id) {
+                        if ($item->getSkuEffect() === SkuInterface::SKU_REPLACE_ALL) {
+                            $skus['replaces'] []= [$item->getSku(), $item->getSkuDelimiter()];
+                        }
+                        else if ($item->getPriceEffect() === SkuInterface::SKU_START_OF) {
+                            $skus['starts'] []= [$item->getSku(), $item->getSkuDelimiter()];
+                        }
+                        else if ($item->getPriceEffect() === SkuInterface::SKU_END_OF) {
+                            $skus['ends'] []= [$item->getSku(), $item->getSkuDelimiter()];
+                        }
+                    }
+                }
+            }
+
+            return $skus;
+        }
+
+        return [];
+    }
+
+    /**
+     * @param $getOptions
+     * @return bool
+     */
+    public function hasOptionIds($getOptions) {
+        foreach ($this->items as $item) {
+            if (in_array($item->getId(), $getOptions)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

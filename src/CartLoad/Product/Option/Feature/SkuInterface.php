@@ -5,8 +5,6 @@ interface SkuInterface {
     const SKU_REPLACE_ALL = 0;
     const SKU_START_OF = 1;
     const SKU_END_OF = 2;
-    const SKU_BEFORE = 3;
-    const SKU_AFTER = 4;
 
     /**
      * @return mixed

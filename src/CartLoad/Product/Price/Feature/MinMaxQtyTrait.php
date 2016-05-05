@@ -25,7 +25,7 @@ trait MinMaxQtyTrait {
 	 * @param int $min_qty
 	 * @return self
 	 */
-	public function setMinQty(int $min_qty) {
+	public function setMinQty($min_qty) {
 		$this->min_qty = $min_qty;
 
 		return $this;
@@ -42,7 +42,7 @@ trait MinMaxQtyTrait {
 	 * @param int $max_qty
 	 * @return self
 	 */
-	public function setMaxQty(int $max_qty) {
+	public function setMaxQty($max_qty) {
 		$this->max_qty = $max_qty;
 
 		return $this;
@@ -59,7 +59,7 @@ trait MinMaxQtyTrait {
 	 * @param boolean $no_minimum_qty_limit
 	 * @return MinMaxQtyTrait
 	 */
-	public function setNoMinimumQtyLimit(bool $no_minimum_qty_limit) {
+	public function setNoMinimumQtyLimit($no_minimum_qty_limit) {
 		$this->no_minimum_qty_limit = $no_minimum_qty_limit;
 
 		return $this;
@@ -76,7 +76,7 @@ trait MinMaxQtyTrait {
 	 * @param boolean $no_maximum_qty_limit
 	 * @return MinMaxQtyTrait
 	 */
-	public function setNoMaximumQtyLimit(bool $no_maximum_qty_limit) {
+	public function setNoMaximumQtyLimit($no_maximum_qty_limit) {
 		$this->no_maximum_qty_limit = $no_maximum_qty_limit;
 
 		return $this;
@@ -86,7 +86,7 @@ trait MinMaxQtyTrait {
      * @param int $qty
      * @return bool
      */
-    public function inMinMaxQtyRange(int $qty) {
+    public function inMinMaxQtyRange($qty) {
         $no_min_limit = $this->isNoMinimumQtyLimit();
         $no_max_limit = $this->isNoMaximumQtyLimit();
         $min_qty = $this->getMinQty();

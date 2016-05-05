@@ -33,7 +33,7 @@ interface MinMaxDateInterface {
      * @param boolean $no_minimum_date_limit
      * @return self
      */
-    public function setNoMinimumDateLimit(bool $no_minimum_date_limit);
+    public function setNoMinimumDateLimit($no_minimum_date_limit);
     
     /**
      * @return boolean
@@ -44,7 +44,7 @@ interface MinMaxDateInterface {
      * @param boolean $no_maximum_date_limit
      * @return self
      */
-    public function setNoMaximumDateLimit(bool $no_maximum_date_limit);
+    public function setNoMaximumDateLimit($no_maximum_date_limit);
 
     /**
      * @param \DateTime $now

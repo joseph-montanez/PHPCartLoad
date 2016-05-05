@@ -1,5 +1,6 @@
 <?php namespace CartLoad\Product;
 
+use CartLoad\Product\Option\Feature\SkuInterface;
 use CartLoad\Product\Option\ItemSet;
 use CartLoad\Product\Price\Feature\PriceInterface;
 
@@ -77,10 +78,99 @@ class Item {
     }
 
     /**
+     * @param \CartLoad\Cart\Item $item
      * @return string
      */
-    public function getSku() {
-        return $this->sku;
+    public function getSku(\CartLoad\Cart\Item $item = null, \DateTime $now = null) {
+        $sku = $this->sku;
+
+        if ($item === null) {
+            return $sku;
+        }
+
+        //-- Get the configuration price
+        if (isset($this->options)) {
+            $default_effect = $this->options instanceof SkuInterface ? $this->options->getSkuEffect() : SkuInterface::SKU_END_OF;
+            $default_delimiter = $this->options instanceof SkuInterface ? $this->options->getSkuDelimiter() : '-';
+
+            $skus = [
+                'replaces' => [],
+                'starts' => [],
+                'ends' => [],
+            ];
+            foreach ($this->getOptions() as $option_set) {
+                if ($option_set->hasOptionIds($item->getOptions())) {
+                    $option_set_skus = $option_set->calculateSkus($item, $now);
+                    if (count($option_set_skus['replaces']) > 0) {
+                        $skus['replaces'] = array_merge($skus['replaces'], $option_set_skus['replaces']);
+                    }
+                    if (count($option_set_skus['starts']) > 0) {
+                        $skus['starts'] = array_merge($skus['starts'], $option_set_skus['starts']);
+                    }
+                    if (count($option_set_skus['ends']) > 0) {
+                        $skus['ends'] = array_merge($skus['ends'], $option_set_skus['ends']);
+                    }
+                }
+            }
+
+            //-- If the SKU is to replace then use the follow logic.
+            if (count($skus['replaces']) > 0) {
+                $sku = array_reduce($skus['replaces'], function ($result, $sku_data) use ($default_delimiter) {
+                    list($sku, $delimiter) = $sku_data;
+                    if ($delimiter === NULL) {
+                        $delimiter = $default_delimiter;
+                    }
+
+                    if (strlen($result) > 0) {
+                        $result = implode($delimiter, [$result, $sku]);
+                    } else {
+                        $result = $sku;
+                    }
+
+                    return $result;
+                }, $sku);
+            } else {
+                //-- Prepend anything to the beginning of the SKU
+                if (count($skus['starts']) > 0) {
+                    $sku = array_reduce($skus['starts'], function ($result, $sku_data) use ($default_delimiter) {
+                        list($sku, $delimiter) = $sku_data;
+                        if ($delimiter === NULL) {
+                            $delimiter = $default_delimiter;
+                        }
+
+                        if (strlen($result) > 0) {
+                            $result = implode($delimiter, [$result, $sku]);
+                        } else {
+                            $result = $sku;
+                        }
+
+                        return $result;
+                    }, $sku);
+                }
+
+                //-- Append anything to the beginning of the SKU
+                if (count($skus['ends']) > 0) {
+                    $sku = array_reduce($skus['ends'], function ($result, $sku_data) use ($default_delimiter) {
+                        list($sku, $delimiter) = $sku_data;
+                        if ($delimiter === NULL) {
+                            $delimiter = $default_delimiter;
+                        }
+
+                        if (strlen($result) > 0) {
+                            $result = implode($delimiter, [$sku, $result]);
+                        }
+                        else {
+                            $result = $sku;
+                        }
+
+                        return $result;
+                    }, $sku);
+                }
+            }
+        }
+
+
+        return $sku;
     }
 
     /**
@@ -118,7 +208,7 @@ class Item {
     }
 
     /**
-     * @param ItemSet $options
+     * @param ItemSet[] $options
      * @return Item
      */
     public function setOptions($options) {

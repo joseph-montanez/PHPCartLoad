@@ -11,7 +11,7 @@ interface MinMaxQtyInterface {
      * @param int $min
      * @return self
      */
-    public function setMinQty(int $min);
+    public function setMinQty($min);
 
     /**
      * @return int
@@ -22,7 +22,7 @@ interface MinMaxQtyInterface {
      * @param int $max
      * @return self
      */
-    public function setMaxQty(int $max);
+    public function setMaxQty($max);
 
     /**
      * @return boolean
@@ -33,7 +33,7 @@ interface MinMaxQtyInterface {
      * @param boolean $no_minimum_limit
      * @return self
      */
-    public function setNoMinimumQtyLimit(bool $no_minimum_limit);
+    public function setNoMinimumQtyLimit($no_minimum_limit);
 
     /**
      * @return boolean
@@ -44,12 +44,12 @@ interface MinMaxQtyInterface {
      * @param boolean $no_maximum_limit
      * @return self
      */
-    public function setNoMaximumQtyLimit(bool $no_maximum_limit);
+    public function setNoMaximumQtyLimit($no_maximum_limit);
 
     /**
      * @param int $qty
      * @return bool
      */
-    public function inMinMaxQtyRange(int $qty);
+    public function inMinMaxQtyRange($qty);
 
 }
