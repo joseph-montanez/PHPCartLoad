@@ -130,8 +130,8 @@ class Item implements SkuInterface, PriceInterface {
                 }
             } else {
                 $this->setSku($value['sku']);
-                $this->setSkuDelimiter('-');
-                $this->setSkuEffect(SkuInterface::SKU_END_OF);
+                $this->setSkuDelimiter(null);
+                $this->setSkuEffect(null);
             }
         }
 

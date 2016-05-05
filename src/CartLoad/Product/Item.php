@@ -139,7 +139,7 @@ class Item {
                         }
 
                         if (strlen($result) > 0) {
-                            $result = implode($delimiter, [$result, $sku]);
+                            $result = implode($delimiter, [$sku, $result]);
                         } else {
                             $result = $sku;
                         }
@@ -157,7 +157,7 @@ class Item {
                         }
 
                         if (strlen($result) > 0) {
-                            $result = implode($delimiter, [$sku, $result]);
+                            $result = implode($delimiter, [$result, $sku]);
                         }
                         else {
                             $result = $sku;

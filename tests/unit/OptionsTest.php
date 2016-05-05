@@ -64,5 +64,11 @@ class OptionsTest extends \Codeception\Test\Unit
         $this->assertEquals(4.95 + 0.4 + 1.1, $shirt->getPrice($cartItem));
         $this->assertEquals('shirt-b-m', $shirt->getSku($cartItem));
 
+        $shirt->getOptions()[0]->setSkuDelimiter('_');
+        $this->assertEquals('shirt_b-m', $shirt->getSku($cartItem));
+
+        $blue_option = $shirt->getOptions()[0]->getItems()[1];
+        $blue_option->setSkuDelimiter('/');
+        $this->assertEquals('shirt/b-m', $shirt->getSku($cartItem));
     }
 }

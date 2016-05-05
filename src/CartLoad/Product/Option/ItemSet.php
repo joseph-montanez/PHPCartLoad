@@ -15,6 +15,9 @@ class ItemSet implements SkuInterface {
     public function __construct(array $data = []) {
         if (count($data) > 0) {
             $this->fromArray($data);
+        } else {
+            $this->setSkuDelimiter('-');
+            $this->setSkuEffect(SkuInterface::SKU_END_OF);
         }
     }
 
@@ -133,21 +136,28 @@ class ItemSet implements SkuInterface {
             $this->setItems($items);
         }
         if (isset($value['sku'])) {
-            if (is_object($value['sku'])) {
+            if (is_array($value['sku'])) {
                 if (isset($value['sku']['sku'])) {
                     $this->setSku($value['sku']['sku']);
                 }
                 if (isset($value['sku']['delimiter'])) {
                     $this->setSkuDelimiter($value['sku']['delimiter']);
+                } else {
+                    $this->setSkuDelimiter('-');
                 }
                 if (isset($value['sku']['effect'])) {
                     $this->setSkuEffect($value['sku']['effect']);
+                } else {
+                    $this->setSkuEffect(SkuInterface::SKU_END_OF);
                 }
             } else {
                 $this->setSku($value['sku']);
                 $this->setSkuDelimiter('-');
                 $this->setSkuEffect(SkuInterface::SKU_END_OF);
             }
+        } else {
+            $this->setSkuDelimiter('-');
+            $this->setSkuEffect(SkuInterface::SKU_END_OF);
         }
 
         return $this;
@@ -211,14 +221,17 @@ class ItemSet implements SkuInterface {
             foreach ($this->getItems() as $item) {
                 foreach ($option_ids as $option_id) {
                     if ($item->getId() == $option_id) {
-                        if ($item->getSkuEffect() === SkuInterface::SKU_REPLACE_ALL) {
-                            $skus['replaces'] []= [$item->getSku(), $item->getSkuDelimiter()];
+                        $sku_effect = $item->getSkuEffect() ?: $this->getSkuEffect();
+                        $sku_delimiter = $item->getSkuDelimiter() ?: $this->getSkuDelimiter();
+
+                        if ($sku_effect === SkuInterface::SKU_REPLACE_ALL) {
+                            $skus['replaces'] []= [$item->getSku(), $sku_delimiter];
                         }
-                        else if ($item->getPriceEffect() === SkuInterface::SKU_START_OF) {
-                            $skus['starts'] []= [$item->getSku(), $item->getSkuDelimiter()];
+                        else if ($sku_effect === SkuInterface::SKU_START_OF) {
+                            $skus['starts'] []= [$item->getSku(), $sku_delimiter];
                         }
-                        else if ($item->getPriceEffect() === SkuInterface::SKU_END_OF) {
-                            $skus['ends'] []= [$item->getSku(), $item->getSkuDelimiter()];
+                        else if ($sku_effect === SkuInterface::SKU_END_OF) {
+                            $skus['ends'] []= [$item->getSku(), $sku_delimiter];
                         }
                     }
                 }
