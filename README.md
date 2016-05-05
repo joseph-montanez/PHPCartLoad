@@ -6,7 +6,7 @@ PHPCartLoad is a library intended to help build shopping carts and general e-com
 
 ## License
 
-What is this AGPL? It makes it impossible to use with my library, why not BSD or MIT? Well there is still lots of work to do as this library is not complete. As the library reaches a 1.0 release I'll decide on what license to use.
+The library is MIT, do what you want with it.
 
 ## Examples
 
@@ -53,3 +53,57 @@ You can also expand on pricing to include bulk pricing, again keeping with somet
     //-- This will return the simple price: 14.95
     var_dump($apple->getPrice($qty));
 
+### SKU Variations
+
+SKU Variations, or options are ways to let a base product serve as a platform for all the variations. So if you have a shirt with several sizes and colors, then you can have custom pricing for each of those variants / options.
+
+    <?php
+    require_once __DIR__ . '/../vendor/autoload.php';
+
+    use CartLoad\Product\Item as ProductItem;
+    use CartLoad\Cart\Item as CartItem;
+
+    $shirt = new ProductItem([
+        'id' => 1,
+        'name' => 'Shirt',
+        'sku' => 'shirt',
+        'price' => [
+            ['min_qty' => 1, 'max_qty' => 9, 'price' => 4.95],
+            ['min_qty' => 10, 'max_qty' => 19, 'price' => 3.95],
+        ],
+        'options' => [
+            [
+                'id' => 1,
+                'name' => 'Color',
+                'required' => true,
+                'items' => [
+                    ['id' => 1, 'name' => 'Red', 'price' => 0.5, 'sku' => 'r'],
+                    ['id' => 2, 'name' => 'Blue', 'price' => 0.4, 'sku' => 'b'],
+                    ['id' => 3, 'name' => 'Green', 'price' => 0.6, 'sku' => 'g'],
+                ]
+            ],
+            [
+                'id' => 2,
+                'name' => 'Size',
+                'required' => true,
+                'items' => [
+                    ['id' => 4, 'name' => 'Small', 'price' => 1.0, 'sku' => 's'],
+                    ['id' => 5, 'name' => 'Medium', 'price' => 1.1, 'sku' => 'm'],
+                    ['id' => 6, 'name' => 'Large', 'price' => 1.2, 'sku' => 'l'],
+                ]
+            ],
+        ]
+    ]);
+
+    //-- Blue Medium Shirt
+    $cartItem = new CartItem([
+        'id'         => 1,
+        'product_id' => 1, //Shirt product ID
+        'qty'        => 1,
+        'options'    => [2, 5] // Blue, Medium
+    ]);
+
+    //-- The unit price of a blue medium shirt is 6.45
+    $unit_price = $shirt->getPrice($cartItem);
+    //-- The resulting SKU is then "shirt-b-m"
+    $unit_sku = $shirt->getSku($cartItem);
