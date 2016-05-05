@@ -105,17 +105,18 @@ class PriceTable {
      * @return PriceInterface[]
      */
     public function getPrices($qty, \DateTime $now = NULL) {
+        $params = func_get_args();
         if ($now === NULL) {
             $now = new \DateTime();
+            $params[1] = $now;
         }
 
         if (is_object($qty) && $qty instanceof \CartLoad\Cart\Item) {
             $item = $qty;
             $qty = $item->getQty();
+            $params[0] = $qty;
         }
 
-        $params = func_get_args();
-        $params[1] = $now;
 
         $price_list = array_reduce($this->prices, function ($result, $price) use ($params) {
             $matches = array_reduce($this->qualifiers, function ($result, $qualifier) use ($price, $params) {
