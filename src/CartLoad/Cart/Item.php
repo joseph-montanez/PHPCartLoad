@@ -17,7 +17,7 @@ class Item {
     /**
      * @var int[]
      */
-    protected $options;
+    protected $variations;
 
     public function __construct(array $data = []) {
         if ($data !== null && is_array($data)) {
@@ -79,22 +79,25 @@ class Item {
     /**
      * @return int[]
      */
-    public function getOptions() {
-        return $this->options;
+    public function getVariations() {
+        return $this->variations;
     }
 
     /**
-     * @param int[] $options
+     * @param int[] $variations
      * @return Item
      */
-    public function setOptions($options) {
-        $this->options = $options;
+    public function setVariations($variations) {
+        $this->variations = $variations;
 
         return $this;
     }
 
-    public function addOption(int $id) {
-        $this->options []= $id;
+    /**
+     * @param int $id
+     */
+    public function addVariation($id) {
+        $this->variations []= $id;
     }
 
     /**
@@ -111,10 +114,147 @@ class Item {
         if (isset($data['qty'])) {
             $this->setQty($data['qty']);
         }
-        if (isset($data['options'])) {
-            $this->setOptions($data['options']);
+        if (isset($data['variations'])) {
+            $this->setVariations($data['variations']);
         }
 
         return $this;
+    }
+
+    /**
+     * @param \DateTime $now
+     * @return PriceInterface|null
+     */
+    public function getPrice(\DateTime $now = null) {
+        $price = null;
+
+        //-- Get base price off pricing table
+        $prices = $this->getPriceTable()->getPrices($this->qty, $now);
+        if (count($prices) > 0) {
+            $price = current($prices);
+            if ($price instanceof PriceInterface) {
+                $price = $price->getPrice();
+            }
+        }
+
+        //-- Get the configuration price
+        if (isset($this->variations)) {
+            $prices = [
+                'combines' => [],
+                'replaces' => [],
+            ];
+            foreach ($this->getVariations() as $variation_set) {
+                $variation_set_prices = $variation_set->calculatePrice($this->qty, $now);
+                if (count($variation_set_prices['combines']) > 0) {
+                    $prices['combines'] = array_merge($prices['combines'], $variation_set_prices['combines']);
+                }
+                if (count($variation_set_prices['replaces']) > 0) {
+                    $prices['replaces'] = array_merge($prices['replaces'], $variation_set_prices['replaces']);
+                }
+            }
+            if (count($prices['replaces']) > 0) {
+                $price = array_sum($prices['replaces']);
+            } else {
+                $price += array_sum($prices['combines']);
+            }
+        }
+
+        return $price;
+    }
+
+
+    /**
+     * @param \CartLoad\Cart\Item $item
+     * @return string
+     */
+    public function getSku(\CartLoad\Cart\Item $item = null, \DateTime $now = null) {
+        $sku = $this->sku;
+
+        if ($item === null) {
+            return $sku;
+        }
+
+        //-- Get the configuration price
+        if (isset($this->variations)) {
+            $default_effect = $this->variations instanceof SkuInterface ? $this->variations->getSkuEffect() : SkuInterface::SKU_END_OF;
+            $default_delimiter = $this->variations instanceof SkuInterface ? $this->variations->getSkuDelimiter() : '-';
+
+            $skus = [
+                'replaces' => [],
+                'starts' => [],
+                'ends' => [],
+            ];
+            foreach ($this->getVariations() as $variation_set) {
+                if ($variation_set->hasVariationIds($item->getVariations())) {
+                    $variation_set_skus = $variation_set->calculateSkus($item, $now);
+                    if (count($variation_set_skus['replaces']) > 0) {
+                        $skus['replaces'] = array_merge($skus['replaces'], $variation_set_skus['replaces']);
+                    }
+                    if (count($variation_set_skus['starts']) > 0) {
+                        $skus['starts'] = array_merge($skus['starts'], $variation_set_skus['starts']);
+                    }
+                    if (count($variation_set_skus['ends']) > 0) {
+                        $skus['ends'] = array_merge($skus['ends'], $variation_set_skus['ends']);
+                    }
+                }
+            }
+
+            //-- If the SKU is to replace then use the follow logic.
+            if (count($skus['replaces']) > 0) {
+                $sku = array_reduce($skus['replaces'], function ($result, $sku_data) use ($default_delimiter) {
+                    list($sku, $delimiter) = $sku_data;
+                    if ($delimiter === NULL) {
+                        $delimiter = $default_delimiter;
+                    }
+
+                    if (strlen($result) > 0) {
+                        $result = implode($delimiter, [$result, $sku]);
+                    } else {
+                        $result = $sku;
+                    }
+
+                    return $result;
+                }, $sku);
+            } else {
+                //-- Prepend anything to the beginning of the SKU
+                if (count($skus['starts']) > 0) {
+                    $sku = array_reduce($skus['starts'], function ($result, $sku_data) use ($default_delimiter) {
+                        list($sku, $delimiter) = $sku_data;
+                        if ($delimiter === NULL) {
+                            $delimiter = $default_delimiter;
+                        }
+
+                        if (strlen($result) > 0) {
+                            $result = implode($delimiter, [$sku, $result]);
+                        } else {
+                            $result = $sku;
+                        }
+
+                        return $result;
+                    }, $sku);
+                }
+
+                //-- Append anything to the beginning of the SKU
+                if (count($skus['ends']) > 0) {
+                    $sku = array_reduce($skus['ends'], function ($result, $sku_data) use ($default_delimiter) {
+                        list($sku, $delimiter) = $sku_data;
+                        if ($delimiter === NULL) {
+                            $delimiter = $default_delimiter;
+                        }
+
+                        if (strlen($result) > 0) {
+                            $result = implode($delimiter, [$result, $sku]);
+                        }
+                        else {
+                            $result = $sku;
+                        }
+
+                        return $result;
+                    }, $sku);
+                }
+            }
+        }
+
+        return $sku;
     }
 }

@@ -15,8 +15,9 @@ class PriceTableTest extends \Codeception\Test\Unit {
 
     // tests
     public function testMinMaxQty() {
+        $factory = new \CartLoad\Product\Price\BulkFactory();
         $bulk = new \CartLoad\Product\Price\Bulk();
-        $bulk->minMaxQtyFromArray([
+        $factory->minMaxQtyFromArray($bulk, [
             'min_qty' => 1,
             'max_qty' => 10,
         ]);
@@ -27,6 +28,7 @@ class PriceTableTest extends \Codeception\Test\Unit {
     }
 
     public function testMinUnlimitedQty() {
+        $factory = new \CartLoad\Product\Price\BulkFactory();
         $bulk = new \CartLoad\Product\Price\Bulk();
 
         //-- All these values should have the same result
@@ -38,13 +40,15 @@ class PriceTableTest extends \Codeception\Test\Unit {
         ];
 
         foreach ($test_arrays as $test) {
-            $bulk->minMaxQtyFromArray($test);
+            $factory->minMaxQtyFromArray($bulk, $test);
+
             $this->assertEquals(1, $bulk->getMinQty());
             $this->assertEquals(TRUE, $bulk->isNoMaximumQtyLimit());
         }
     }
 
     public function testMaxUnlimitedQty() {
+        $factory = new \CartLoad\Product\Price\BulkFactory();
         $bulk = new \CartLoad\Product\Price\Bulk();
 
         //-- All these values should have the same result
@@ -56,15 +60,17 @@ class PriceTableTest extends \Codeception\Test\Unit {
         ];
 
         foreach ($test_arrays as $test) {
-            $bulk->minMaxQtyFromArray($test);
+            $factory->minMaxQtyFromArray($bulk, $test);
+
             $this->assertEquals(10, $bulk->getMaxQty());
             $this->assertEquals(TRUE, $bulk->isNoMinimumQtyLimit());
         }
     }
 
     public function testUnlimitedQty() {
+        $factory = new \CartLoad\Product\Price\BulkFactory();
         $bulk = new \CartLoad\Product\Price\Bulk();
-        $bulk->minMaxQtyFromArray([]);
+        $factory->minMaxQtyFromArray($bulk, []);
 
         $this->assertEquals(TRUE, $bulk->isNoMinimumQtyLimit());
         $this->assertEquals(TRUE, $bulk->isNoMaximumQtyLimit());
@@ -72,10 +78,12 @@ class PriceTableTest extends \Codeception\Test\Unit {
 
     // tests
     public function testMinMaxDate() {
+        $factory = new \CartLoad\Product\Price\BulkFactory();
+
         $min_date = new \DateTime('2016-10-10');
         $max_date = new \DateTime('2016-11-10');
         $bulk = new \CartLoad\Product\Price\Bulk();
-        $bulk->minMaxDateFromArray([
+        $factory->minMaxDateFromArray($bulk, [
             'min_date' => '2016-10-10',
             'max_date' => '2016-11-10',
         ]);
@@ -86,6 +94,8 @@ class PriceTableTest extends \Codeception\Test\Unit {
     }
 
     public function testMinUnlimitedDate() {
+        $factory = new \CartLoad\Product\Price\BulkFactory();
+
         $min_date = new \DateTime('2016-10-10');
         $bulk = new \CartLoad\Product\Price\Bulk();
 
@@ -98,7 +108,7 @@ class PriceTableTest extends \Codeception\Test\Unit {
         ];
 
         foreach ($test_arrays as $test) {
-            $bulk->minMaxDateFromArray($test);
+            $factory->minMaxDateFromArray($bulk, $test);
             $this->assertEquals($min_date, $bulk->getMinDate());
             $this->assertEquals(TRUE, $bulk->isNoMaximumDateLimit());
         }
@@ -106,6 +116,8 @@ class PriceTableTest extends \Codeception\Test\Unit {
     }
 
     public function testMaxUnlimitedDate() {
+        $factory = new \CartLoad\Product\Price\BulkFactory();
+
         $max_date = new \DateTime('2016-11-10');
         $bulk = new \CartLoad\Product\Price\Bulk();
 
@@ -118,15 +130,17 @@ class PriceTableTest extends \Codeception\Test\Unit {
         ];
 
         foreach ($test_arrays as $test) {
-            $bulk->minMaxDateFromArray($test);
+            $factory->minMaxDateFromArray($bulk, $test);
             $this->assertEquals($max_date, $bulk->getMaxDate());
             $this->assertEquals(TRUE, $bulk->isNoMinimumDateLimit());
         }
     }
 
     public function testUnlimitedQDate() {
+        $factory = new \CartLoad\Product\Price\BulkFactory();
+
         $bulk = new \CartLoad\Product\Price\Bulk();
-        $bulk->minMaxDateFromArray([]);
+        $factory->minMaxDateFromArray($bulk, []);
 
         $this->assertEquals(TRUE, $bulk->isNoMinimumDateLimit());
         $this->assertEquals(TRUE, $bulk->isNoMaximumDateLimit());

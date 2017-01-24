@@ -8,6 +8,13 @@ PHPCartLoad is a library intended to help build shopping carts and general e-com
 
 The library is MIT, do what you want with it.
 
+## To Do
+
+This is still alpha and undergoing changes for a better API. The following is to change:
+
+ - Move cart item fromArray to a factory
+ - Move product getCartXXX to the cart item
+
 ## Examples
 
 ### Simple Pricing
@@ -15,18 +22,20 @@ The library is MIT, do what you want with it.
 This is the Hello World of this library, showing you how little you have to do to start to get the library working with your existing code base.
 
     <?php
-    use CartLoad\Product\Item;
-
     require_once __DIR__ . '/../vendor/autoload.php';
-
-    $apple = new Item([
+    
+    use CartLoad\Product\Product;
+    
+    
+    $apple = Product::make([
         'name' => 'Apple',
         'sku' => 'a',
         'price' => 19.95
     ]);
-
+    
     $qty = 10;
-
+    
+    
     //-- This will return the simple price: 19.95
     var_dump($apple->getPrice($qty));
 
@@ -35,11 +44,11 @@ This is the Hello World of this library, showing you how little you have to do t
 You can also expand on pricing to include bulk pricing, again keeping with something as simple as possible.
 
     <?php
-    use CartLoad\Product\Item;
-
     require_once __DIR__ . '/../vendor/autoload.php';
+    
+    use CartLoad\Product\Product;
 
-    $apple = new Item([
+    $apple = new Product([
         'name' => 'Apple',
         'sku' => 'a',
         'price' => [
@@ -59,11 +68,11 @@ SKU Variations, or options are ways to let a base product serve as a platform fo
 
     <?php
     require_once __DIR__ . '/../vendor/autoload.php';
-
-    use CartLoad\Product\Item as ProductItem;
-    use CartLoad\Cart\Item as CartItem;
-
-    $shirt = new ProductItem([
+    
+    use CartLoad\Product\Product;
+    use CartLoad\Cart\Item;
+    
+    $shirt = Product::make([
         'id' => 1,
         'name' => 'Shirt',
         'sku' => 'shirt',
@@ -71,7 +80,7 @@ SKU Variations, or options are ways to let a base product serve as a platform fo
             ['min_qty' => 1, 'max_qty' => 9, 'price' => 4.95],
             ['min_qty' => 10, 'max_qty' => 19, 'price' => 3.95],
         ],
-        'options' => [
+        'variations' => [
             [
                 'id' => 1,
                 'name' => 'Color',
@@ -94,16 +103,16 @@ SKU Variations, or options are ways to let a base product serve as a platform fo
             ],
         ]
     ]);
-
+    
     //-- Blue Medium Shirt
-    $cartItem = new CartItem([
+    $cartItem = new Item([
         'id'         => 1,
         'product_id' => 1, //Shirt product ID
         'qty'        => 1,
-        'options'    => [2, 5] // Blue, Medium
+        'variations' => [2, 5] // Blue, Medium
     ]);
-
+    
     //-- The unit price of a blue medium shirt is 6.45
-    $unit_price = $shirt->getPrice($cartItem);
+    $unit_price = $shirt->getCartPrice($cartItem);
     //-- The resulting SKU is then "shirt-b-m"
-    $unit_sku = $shirt->getSku($cartItem);
+    $unit_sku = $shirt->getCartSku($cartItem);

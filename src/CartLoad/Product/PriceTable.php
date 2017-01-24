@@ -1,13 +1,12 @@
 <?php namespace CartLoad\Product;
 
 
-use CartLoad\Product\Price\Simple;
-use CartLoad\Product\Price\Bulk;
-use CartLoad\Product\Price\Feature\MinMaxDateInterface;
-use CartLoad\Product\Price\Feature\MinMaxQtyInterface;
-use CartLoad\Product\Price\Feature\PriceInterface;
+use CartLoad\Product\Feature\MinMaxDateInterface;
+use CartLoad\Product\Feature\MinMaxQtyInterface;
+use CartLoad\Product\Feature\PriceInterface;
 
-class PriceTable {
+class PriceTable
+{
     /**
      * A list of prices
      * @var array $prices
@@ -30,10 +29,10 @@ class PriceTable {
      * PriceTable constructor.
      * @param PriceInterface[] $prices
      */
-    public function  __construct(array $prices = [])
+    public function __construct(array $prices = [])
     {
         $this->prices = $prices;
-        $this->setUndefinedBehavior(FALSE);
+        $this->setUndefinedBehavior(false);
         $this->qualifiers = [];
         $this->addDefaultQualifiers();
     }
@@ -63,7 +62,8 @@ class PriceTable {
     /**
      * @param $fn callable Adds a function to the list of qualifiers of a price
      */
-    public function addQualifier($fn) {
+    public function addQualifier($fn)
+    {
         $this->qualifiers [] = $fn;
     }
 
@@ -71,7 +71,8 @@ class PriceTable {
      * Add a price, it must at least have the price interface to get pricing from.
      * @param PriceInterface $price
      */
-    public function addPrice(PriceInterface $price) {
+    public function addPrice(PriceInterface $price)
+    {
         $this->prices [] = $price;
     }
 
@@ -94,7 +95,6 @@ class PriceTable {
     }
 
 
-
     /**
      * Return a list of prices that match the quantity and date. This will return multiple prices, if undefined debavori so that a developer
      * layer the results, so if they want to implement member based pricing, the existing code here can be used, and
@@ -104,9 +104,10 @@ class PriceTable {
      * @param \DateTime|NULL $now
      * @return PriceInterface[]
      */
-    public function getPrices($qty, \DateTime $now = NULL) {
+    public function getPrices($qty, \DateTime $now = null)
+    {
         $params = func_get_args();
-        if ($now === NULL) {
+        if ($now === null) {
             $now = new \DateTime();
             $params[1] = $now;
         }
@@ -134,8 +135,10 @@ class PriceTable {
             $price_list = array_reduce($price_list, function ($result, $price) {
                 if (count($result) === 0) {
                     $result = [$price];
-                } else if ($price['matches'] > $result[0]['matches']) {
-                    $result = [$price];
+                } else {
+                    if ($price['matches'] > $result[0]['matches']) {
+                        $result = [$price];
+                    }
                 }
 
                 return $result;
@@ -145,40 +148,5 @@ class PriceTable {
         return array_map(function ($result) {
             return $result['price'];
         }, $price_list);
-    }
-
-    /**
-     * @param array|float $prices
-     * @return $this
-     */
-    public function fromArray($prices) {
-        if (is_array($prices)) {
-            foreach ($prices as $key => $price) {
-                if (is_float($price) || is_double($price)) {
-                    $this->addPrice(new Simple($price));
-                } else {
-                    $price_type = current(array_keys($price));
-                    $price_value = $price[$price_type];
-
-                    if ($price_type === 'Simple') {
-                        $this->addPrice(new Simple($price_value));
-                    }
-                    else if ($price_type === 'Bulk') {
-                        $this->addPrice((new Bulk())->fromArray($price_value));
-                    }
-                    else {
-                        if (class_exists($price_type)) {
-                            $this->addPrice((new $price_type())->fromArray($price[$price_type]));
-                        } else {
-                            $this->addPrice((new Bulk())->fromArray($price));
-                        }
-                    }
-                }
-            }
-        } else if (is_float($prices) || is_double($prices)) {
-            $this->addPrice(new Simple($prices));
-        }
-
-        return $this;
     }
 }

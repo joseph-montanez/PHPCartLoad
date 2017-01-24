@@ -1,12 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: josephmontanez
- * Date: 4/29/16
- * Time: 10:54 PM
- */
-
-namespace CartLoad\Product\Option\Feature;
+<?php namespace CartLoad\Product\Feature;
 
 
 trait SkuTrait

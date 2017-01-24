@@ -1,7 +1,8 @@
-<?php namespace CartLoad\Product\Price\Feature;
+<?php namespace CartLoad\Product\Feature;
 
 
-interface MinMaxQtyInterface {
+interface MinMaxQtyInterface
+{
     /**
      * @return int
      */

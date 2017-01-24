@@ -1,6 +1,8 @@
 <?php
 
 
+use CartLoad\Product\ProductFactory;
+
 class ItemAssignmentTest extends \Codeception\Test\Unit
 {
     /**
@@ -33,8 +35,9 @@ class ItemAssignmentTest extends \Codeception\Test\Unit
             'price' => $price
         ];
 
-        $item = new \CartLoad\Product\Item();
-        $item->fromArray($data);
+
+        $factory = new ProductFactory;
+        $item = $factory->make($data);
 
         $this->assertEquals(12, $item->getId());
         $this->assertEquals($sku, $item->getSku());

@@ -1,9 +1,9 @@
 <?php
 
 
-use CartLoad\Product\Item;
+use CartLoad\Product\ProductFactory;
 
-class OptionsTest extends \Codeception\Test\Unit
+class CombinationsTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
@@ -21,7 +21,7 @@ class OptionsTest extends \Codeception\Test\Unit
     // tests
     public function testMe()
     {
-        $shirt = new Item([
+        $shirt = (new ProductFactory)->make([
             'id' => 1,
             'name' => 'Shirt',
             'sku' => 'shirt',
@@ -29,7 +29,7 @@ class OptionsTest extends \Codeception\Test\Unit
                 ['min_qty' => 1, 'max_qty' => 9, 'price' => 4.95],
                 ['min_qty' => 10, 'max_qty' => 19, 'price' => 3.95],
             ],
-            'options' => [
+            'variations' => [
                 [
                     'id' => 1,
                     'name' => 'Color',
@@ -50,6 +50,15 @@ class OptionsTest extends \Codeception\Test\Unit
                         ['id' => 6, 'name' => 'Large', 'price' => 1.2, 'sku' => 'l'],
                     ]
                 ],
+            ],
+            'combinations' => [
+                //-- Blue Medium Shirt
+                [
+                    'id' => 1,
+                    'variations' => [2, 5],
+                    'price' => 7.00,
+                    'sku' => 'shirt-blue-media',
+                ]
             ]
         ]);
 
@@ -58,17 +67,11 @@ class OptionsTest extends \Codeception\Test\Unit
             'id'         => 1,
             'product_id' => 1, //Shirt product ID
             'qty'        => 1,
-            'options'    => [2, 5] // Blue, Medium
+            'variations'    => [2, 5] // Blue, Medium
         ]);
-    
-        $this->assertEquals(4.95 + 0.4 + 1.1, $shirt->getPrice($cartItem));
-        $this->assertEquals('shirt-b-m', $shirt->getSku($cartItem));
 
-        $shirt->getOptions()[0]->setSkuDelimiter('_');
-        $this->assertEquals('shirt_b-m', $shirt->getSku($cartItem));
+        $this->assertEquals(7.00, $shirt->getCartPrice($cartItem)->getPrice());
+        $this->assertEquals('shirt-blue-media', $shirt->getCartSku($cartItem));
 
-        $blue_option = $shirt->getOptions()[0]->getItems()[1];
-        $blue_option->setSkuDelimiter('/');
-        $this->assertEquals('shirt/b-m', $shirt->getSku($cartItem));
     }
 }

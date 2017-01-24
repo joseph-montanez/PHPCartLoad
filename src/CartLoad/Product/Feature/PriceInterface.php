@@ -1,10 +1,11 @@
-<?php namespace CartLoad\Product\Price\Feature;
+<?php namespace CartLoad\Product\Feature;
 
 
-interface PriceInterface {
+interface PriceInterface
+{
     const PRICE_REPLACE_ALL = 0;
     const PRICE_COMBINE = 1;
-    
+
     /**
      * @return float
      */

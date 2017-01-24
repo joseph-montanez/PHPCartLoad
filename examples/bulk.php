@@ -1,10 +1,10 @@
 <?php
-use CartLoad\Product\Item;
+use CartLoad\Product\Product;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
-$apple = new Item([
+$apple = Product::make([
     'name' => 'Apple',
     'sku' => 'a',
     'price' => [

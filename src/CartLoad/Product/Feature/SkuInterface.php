@@ -1,4 +1,4 @@
-<?php namespace CartLoad\Product\Option\Feature;
+<?php namespace CartLoad\Product\Feature;
 
 
 interface SkuInterface

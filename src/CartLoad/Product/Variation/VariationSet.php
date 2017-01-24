@@ -1,10 +1,10 @@
-<?php namespace CartLoad\Product\Option;
+<?php namespace CartLoad\Product\Variation;
 
-use CartLoad\Product\Option\Feature\SkuInterface;
-use CartLoad\Product\Option\Feature\SkuTrait;
 use CartLoad\Product\Feature\PriceInterface;
+use CartLoad\Product\Feature\SkuInterface;
+use CartLoad\Product\Feature\SkuTrait;
 
-class ItemSet implements SkuInterface
+class VariationSet implements SkuInterface
 {
     use SkuTrait;
 
@@ -13,7 +13,7 @@ class ItemSet implements SkuInterface
     protected $required;
     protected $order;
     /**
-     * @var Item[]
+     * @var Variation[]
      */
     protected $items;
 
@@ -47,7 +47,7 @@ class ItemSet implements SkuInterface
         }
         if (isset($value['items'])) {
             $items = array_map(function ($item) {
-                return new Item($item);
+                return new Variation($item);
             }, $value['items']);
             $this->setItems($items);
         }
@@ -89,7 +89,7 @@ class ItemSet implements SkuInterface
 
     /**
      * @param mixed $id
-     * @return Item
+     * @return Variation
      */
     public function setId($id)
     {
@@ -108,7 +108,7 @@ class ItemSet implements SkuInterface
 
     /**
      * @param mixed $name
-     * @return Item
+     * @return Variation
      */
     public function setName($name)
     {
@@ -127,7 +127,7 @@ class ItemSet implements SkuInterface
 
     /**
      * @param mixed $required
-     * @return Item
+     * @return Variation
      */
     public function setRequired($required)
     {
@@ -146,7 +146,7 @@ class ItemSet implements SkuInterface
 
     /**
      * @param mixed $order
-     * @return Item
+     * @return Variation
      */
     public function setOrder($order)
     {
@@ -169,7 +169,7 @@ class ItemSet implements SkuInterface
         if (is_object($qty) && $qty instanceof \CartLoad\Cart\Item) {
             $cart_item = $qty;
             $qty = $cart_item->getQty();
-            $option_ids = $cart_item->getOptions();
+            $variation_ids = $cart_item->getVariations();
 
             $prices = [
                 'replaces' => [],
@@ -177,8 +177,8 @@ class ItemSet implements SkuInterface
             ];
 
             foreach ($this->getItems() as $item) {
-                foreach ($option_ids as $option_id) {
-                    if ($item->getId() == $option_id) {
+                foreach ($variation_ids as $variation_id) {
+                    if ($item->getId() == $variation_id) {
                         if ($item->getPriceEffect() === PriceInterface::PRICE_COMBINE) {
                             $prices['combines'] [] = $item->getPrice();
                         } else {
@@ -197,7 +197,7 @@ class ItemSet implements SkuInterface
     }
 
     /**
-     * @return Item[]
+     * @return Variation[]
      */
     public function getItems()
     {
@@ -205,8 +205,8 @@ class ItemSet implements SkuInterface
     }
 
     /**
-     * @param Item[] $items
-     * @return ItemSet
+     * @param Variation[] $items
+     * @return VariationSet
      */
     public function setItems($items)
     {
@@ -224,7 +224,7 @@ class ItemSet implements SkuInterface
         if (is_object($qty) && $qty instanceof \CartLoad\Cart\Item) {
             $cart_item = $qty;
             $qty = $cart_item->getQty();
-            $option_ids = $cart_item->getOptions();
+            $variation_ids = $cart_item->getVariations();
 
             $skus = [
                 'replaces' => [],
@@ -233,8 +233,8 @@ class ItemSet implements SkuInterface
             ];
 
             foreach ($this->getItems() as $item) {
-                foreach ($option_ids as $option_id) {
-                    if ($item->getId() == $option_id) {
+                foreach ($variation_ids as $variation_id) {
+                    if ($item->getId() == $variation_id) {
                         $sku_effect = $item->getSkuEffect() ?: $this->getSkuEffect();
                         $sku_delimiter = $item->getSkuDelimiter() ?: $this->getSkuDelimiter();
 
@@ -260,13 +260,13 @@ class ItemSet implements SkuInterface
     }
 
     /**
-     * @param $getOptions
+     * @param $getVariations
      * @return bool
      */
-    public function hasOptionIds($getOptions)
+    public function hasVariationIds($getVariations)
     {
         foreach ($this->items as $item) {
-            if (in_array($item->getId(), $getOptions)) {
+            if (in_array($item->getId(), $getVariations)) {
                 return true;
             }
         }

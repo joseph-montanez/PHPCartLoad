@@ -1,11 +1,11 @@
-<?php namespace CartLoad\Product\Option;
+<?php namespace CartLoad\Product\Variation;
 
-use CartLoad\Product\Option\Feature\SkuInterface;
-use CartLoad\Product\Option\Feature\SkuTrait;
 use CartLoad\Product\Feature\PriceInterface;
 use CartLoad\Product\Feature\PriceTrait;
+use CartLoad\Product\Feature\SkuInterface;
+use CartLoad\Product\Feature\SkuTrait;
 
-class Item implements SkuInterface, PriceInterface
+class Variation implements SkuInterface, PriceInterface
 {
     use SkuTrait, PriceTrait;
 
@@ -49,7 +49,7 @@ class Item implements SkuInterface, PriceInterface
         }
         if (isset($value['items'])) {
             $this->setItems(array_map(function ($item) {
-                return new Item($item);
+                return new Variation($item);
             }, $value['items']));
         }
         if (isset($value['sku'])) {
@@ -83,7 +83,7 @@ class Item implements SkuInterface, PriceInterface
 
     /**
      * @param mixed $id
-     * @return Item
+     * @return Variation
      */
     public function setId($id)
     {
@@ -102,7 +102,7 @@ class Item implements SkuInterface, PriceInterface
 
     /**
      * @param mixed $name
-     * @return Item
+     * @return Variation
      */
     public function setName($name)
     {
@@ -121,7 +121,7 @@ class Item implements SkuInterface, PriceInterface
 
     /**
      * @param mixed $required
-     * @return Item
+     * @return Variation
      */
     public function setRequired($required)
     {
@@ -140,7 +140,7 @@ class Item implements SkuInterface, PriceInterface
 
     /**
      * @param mixed $order
-     * @return Item
+     * @return Variation
      */
     public function setOrder($order)
     {
