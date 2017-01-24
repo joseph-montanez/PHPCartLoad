@@ -12,8 +12,8 @@ The library is MIT, do what you want with it.
 
 This is still alpha and undergoing changes for a better API. The following is to change:
 
- - Move cart item fromArray to a factory
- - Move product getCartXXX to the cart item
+ - Move cart item fromArray to a cart item factory
+ - Move product getCartXXX to the cart item (Started)
 
 ## Examples
 
