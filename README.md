@@ -105,7 +105,7 @@ SKU Variations, or options are ways to let a base product serve as a platform fo
     ]);
     
     //-- Blue Medium Shirt
-    $cartItem = new Item([
+    $cartItem = Item::make([
         'id'         => 1,
         'product_id' => 1, //Shirt product ID
         'qty'        => 1,

@@ -19,10 +19,15 @@ class Item {
      */
     protected $variations;
 
-    public function __construct(array $data = []) {
-        if ($data !== null && is_array($data)) {
-            $this->fromArray($data);
-        }
+    public function __construct() {}
+
+    /**
+     * @param $data
+     * @return \CartLoad\Cart\Item
+     */
+    public static function make($data)
+    {
+        return (new ItemFactory())->make($data);
     }
 
     /**
@@ -98,27 +103,6 @@ class Item {
      */
     public function addVariation($id) {
         $this->variations []= $id;
-    }
-
-    /**
-     * @param array $data
-     * @return self
-     */
-    public function fromArray(array $data) {
-        if (isset($data['id'])) {
-            $this->setId($data['id']);
-        }
-        if (isset($data['product_id'])) {
-            $this->setProductId($data['product_id']);
-        }
-        if (isset($data['qty'])) {
-            $this->setQty($data['qty']);
-        }
-        if (isset($data['variations'])) {
-            $this->setVariations($data['variations']);
-        }
-
-        return $this;
     }
 
     /**

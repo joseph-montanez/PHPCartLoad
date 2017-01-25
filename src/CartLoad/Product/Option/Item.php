@@ -1,5 +1,6 @@
 <?php namespace CartLoad\Product\Option;
 
+use CartLoad\Cart\ItemFactory;
 use CartLoad\Product\Option\Feature\SkuInterface;
 use CartLoad\Product\Option\Feature\SkuTrait;
 use CartLoad\Product\Feature\PriceInterface;
@@ -49,7 +50,7 @@ class Item implements SkuInterface, PriceInterface
         }
         if (isset($value['items'])) {
             $this->setItems(array_map(function ($item) {
-                return new Item($item);
+                return Item::make($item);
             }, $value['items']));
         }
         if (isset($value['sku'])) {

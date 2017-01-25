@@ -47,7 +47,7 @@ class ItemSet implements SkuInterface
         }
         if (isset($value['items'])) {
             $items = array_map(function ($item) {
-                return new Item($item);
+                return Item::make($item);
             }, $value['items']);
             $this->setItems($items);
         }

@@ -1,8 +1,8 @@
 <?php
 
 
+use CartLoad\Cart\Item;
 use CartLoad\Product\Product;
-use CartLoad\Product\ProductFactory;
 
 class VariationsTest extends \Codeception\Test\Unit
 {
@@ -55,7 +55,7 @@ class VariationsTest extends \Codeception\Test\Unit
         ]);
 
         //-- Blue Medium Shirt
-        $cartItem = new \CartLoad\Cart\Item([
+        $cartItem = Item::make([
             'id'         => 1,
             'product_id' => 1, //Shirt product ID
             'qty'        => 1,

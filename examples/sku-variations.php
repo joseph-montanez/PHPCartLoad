@@ -38,7 +38,7 @@ $shirt = Product::make([
 ]);
 
 //-- Blue Medium Shirt
-$cartItem = new Item([
+$cartItem = Item::make([
     'id'         => 1,
     'product_id' => 1, //Shirt product ID
     'qty'        => 1,
