@@ -4,6 +4,7 @@
 use CartLoad\Product\Combination;
 use CartLoad\Product\Feature\PriceInterface;
 use CartLoad\Product\Feature\SkuInterface;
+use CartLoad\Product\Price\SimpleFactory;
 use CartLoad\Product\Product;
 
 class Item {
@@ -151,7 +152,7 @@ class Item {
      * @return PriceInterface|null
      * @internal param $qty
      */
-    public function getPrice(Product $product, \DateTime $now = null)
+    public function getPriceInterface(Product $product, \DateTime $now = null)
     {
         //-- If this is a CartItem and the Product has a matching computed combination, then return the price from the
         // combination
@@ -195,7 +196,21 @@ class Item {
             }
         }
 
+        if (!$price instanceof PriceInterface) {
+            return (new SimpleFactory())->make($price);
+        }
+
         return $price;
+    }
+
+    public function getPrice(Product $product, \DateTime $now = null)
+    {
+        $price = $this->getPriceInterface($product, $now);
+        if ($price != null) {
+            return $price->getPrice();
+        } else {
+            return $price;
+        }
     }
 
 
@@ -280,7 +295,13 @@ class Item {
                 //-- Append anything to the beginning of the SKU
                 if (count($sku_list['ends']) > 0) {
                     $sku = array_reduce($sku_list['ends'], function ($result, $sku_data) use ($default_delimiter) {
-                        list($sku, $delimiter) = $sku_data;
+                        list($sku_data, $delimiter) = $sku_data;
+                        if (is_array($sku_data)) {
+                            $sku_effect = $sku_data['effect'];
+                            $sku = $sku_data['sku'];
+                        } else {
+                            $sku = $sku_data;
+                        }
                         if ($delimiter === null) {
                             $delimiter = $default_delimiter;
                         }

@@ -1,5 +1,6 @@
 <?php namespace CartLoad\Product\Variation;
 
+use CartLoad\Cart\Item;
 use CartLoad\Product\Feature\PriceInterface;
 use CartLoad\Product\Feature\SkuInterface;
 use CartLoad\Product\Feature\SkuTrait;
@@ -166,7 +167,7 @@ class VariationSet implements SkuInterface
             $now = new \DateTime();
         }
 
-        if (is_object($qty) && $qty instanceof \CartLoad\Cart\Item) {
+        if (is_object($qty) && $qty instanceof Item) {
             $cart_item = $qty;
             $qty = $cart_item->getQty();
             $variation_ids = $cart_item->getVariations();
@@ -221,7 +222,7 @@ class VariationSet implements SkuInterface
             $now = new \DateTime();
         }
 
-        if (is_object($qty) && $qty instanceof \CartLoad\Cart\Item) {
+        if (is_object($qty) && $qty instanceof Item) {
             $cart_item = $qty;
             $qty = $cart_item->getQty();
             $variation_ids = $cart_item->getVariations();
