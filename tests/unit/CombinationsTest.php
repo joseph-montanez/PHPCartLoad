@@ -71,8 +71,8 @@ class CombinationsTest extends \Codeception\Test\Unit
             'variations'    => [2, 5] // Blue, Medium
         ]);
 
-        $this->assertEquals(7.00, $shirt->getCartPrice($cartItem)->getPrice());
-        $this->assertEquals('shirt-blue-media', $shirt->getCartSku($cartItem));
+        $this->assertEquals(7.00, $cartItem->getPrice($shirt)->getPrice());
+        $this->assertEquals('shirt-blue-media', $cartItem->getSku($shirt));
 
     }
 }

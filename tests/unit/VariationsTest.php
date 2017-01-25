@@ -62,14 +62,14 @@ class VariationsTest extends \Codeception\Test\Unit
             'variations' => [2, 5] // Blue, Medium
         ]);
     
-        $this->assertEquals(4.95 + 0.4 + 1.1, $shirt->getCartPrice($cartItem));
-        $this->assertEquals('shirt-b-m', $shirt->getCartSku($cartItem));
+        $this->assertEquals(4.95 + 0.4 + 1.1, $cartItem->getPrice($shirt));
+        $this->assertEquals('shirt-b-m', $cartItem->getSku($shirt));
 
         $shirt->getVariations()[0]->setSkuDelimiter('_');
-        $this->assertEquals('shirt_b-m', $shirt->getCartSku($cartItem));
+        $this->assertEquals('shirt_b-m', $cartItem->getSku($shirt));
 
         $blue_variation = $shirt->getVariations()[0]->getItems()[1];
         $blue_variation->setSkuDelimiter('/');
-        $this->assertEquals('shirt/b-m', $shirt->getCartSku($cartItem));
+        $this->assertEquals('shirt/b-m', $cartItem->getSku($shirt));
     }
 }

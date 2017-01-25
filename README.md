@@ -12,8 +12,9 @@ The library is MIT, do what you want with it.
 
 This is still alpha and undergoing changes for a better API. The following is to change:
 
- - Move product getCartXXX to the cart item (Started)
- - Deal with weight
+ - Create tests for weight
+ - Cart Container API
+ - Validation / Contract Based Programming
  - Events
  - Shipping API
    - Initial Support For USPS
@@ -118,6 +119,6 @@ SKU Variations, or options are ways to let a base product serve as a platform fo
     ]);
     
     //-- The unit price of a blue medium shirt is 6.45
-    $unit_price = $shirt->getCartPrice($cartItem);
+    $unit_price = $cartItem->getPrice($shirt);
     //-- The resulting SKU is then "shirt-b-m"
-    $unit_sku = $shirt->getCartSku($cartItem);
+    $unit_sku = $cartItem->getSku($shirt);

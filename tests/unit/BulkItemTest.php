@@ -1,4 +1,6 @@
 <?php
+use CartLoad\Cart\Item;
+use CartLoad\Product\Product;
 use CartLoad\Product\ProductFactory;
 
 class BulkItemTest extends \Codeception\Test\Unit
@@ -19,7 +21,8 @@ class BulkItemTest extends \Codeception\Test\Unit
     // tests
     public function testBulkPricing()
     {
-        $apple = (new ProductFactory)->make([
+        $apple = Product::make([
+            'id' => 1,
             'name' => 'Apple',
             'sku' => 'a',
             'price' => [
@@ -30,15 +33,20 @@ class BulkItemTest extends \Codeception\Test\Unit
 
         $qty = 10;
 
+        $cart_item = new Item();
+        $cart_item->setId(1);
+        $cart_item->setProductId(1);
+        $cart_item->setQty($qty);
 
         //-- This will return the simple price: 14.95
-        $this->assertEquals(14.95, $apple->getCartPrice($qty));
+        $this->assertEquals(14.95, $cart_item->getPrice($apple));
 
     }
 
     public function testBulkPricingAlt()
     {
-        $apple = (new ProductFactory)->make([
+        $apple = Product::make([
+            'id' => 1,
             'name' => 'Apple',
             'sku' => 'a',
             'price' => [
@@ -49,15 +57,20 @@ class BulkItemTest extends \Codeception\Test\Unit
 
         $qty = 10;
 
+        $cart_item = new Item();
+        $cart_item->setId(1);
+        $cart_item->setProductId(1);
+        $cart_item->setQty($qty);
 
         //-- This will return the simple price: 14.95
-        $this->assertEquals(14.95, $apple->getCartPrice($qty));
+        $this->assertEquals(14.95, $cart_item->getPrice($apple));
 
     }
 
     public function testBulkPricingUndefinedBehavior()
     {
-        $apple = (new ProductFactory)->make([
+        $apple = Product::make([
+            'id' => 1,
             'name' => 'Apple',
             'sku' => 'a',
             'price' => [
@@ -68,7 +81,12 @@ class BulkItemTest extends \Codeception\Test\Unit
 
         $qty = 10;
 
-        $this->assertEquals(14.95, $apple->getCartPrice($qty));
+        $cart_item = new Item();
+        $cart_item->setId(1);
+        $cart_item->setProductId(1);
+        $cart_item->setQty($qty);
+
+        $this->assertEquals(14.95, $cart_item->getPrice($apple));
 
     }
 
@@ -77,7 +95,8 @@ class BulkItemTest extends \Codeception\Test\Unit
      */
     public function testBulkPricingDateRange()
     {
-        $apple = (new ProductFactory)->make([
+        $apple = Product::make([
+            'id' => 1,
             'name' => 'Apple',
             'sku' => 'a',
             'price' => [
@@ -87,15 +106,26 @@ class BulkItemTest extends \Codeception\Test\Unit
             ]
         ]);
 
-        $this->assertEquals(14.95, $apple->getCartPrice(2));
-        $this->assertEquals(13.95, $apple->getCartPrice(11));
-        $this->assertEquals(11.95, $apple->getCartPrice(11, new \DateTime('2016-01-05')));
+        $cart_item = new Item();
+        $cart_item->setId(1);
+        $cart_item->setProductId(1);
+
+
+        $cart_item->setQty(2);
+        $this->assertEquals(14.95, $cart_item->getPrice($apple));
+
+        $cart_item->setQty(11);
+        $this->assertEquals(13.95, $cart_item->getPrice($apple));
+
+        $cart_item->setQty(11);
+        $this->assertEquals(11.95, $cart_item->getPrice($apple, new \DateTime('2016-01-05')));
 
     }
 
     public function testCustomBulkPrice()
     {
-        $apple = (new ProductFactory)->make([
+        $apple = Product::make([
+            'id' => 1,
             'name' => 'Apple',
             'sku' => 'a',
             'price' => [
@@ -104,8 +134,15 @@ class BulkItemTest extends \Codeception\Test\Unit
             ]
         ]);
 
-        $this->assertEquals(14.95, $apple->getCartPrice(6));
-        $this->assertEquals(13.95, $apple->getCartPrice(11));
+        $cart_item = new Item();
+        $cart_item->setId(1);
+        $cart_item->setProductId(1);
+
+        $cart_item->setQty(6);
+        $this->assertEquals(14.95, $cart_item->getPrice($apple));
+
+        $cart_item->setQty(11);
+        $this->assertEquals(13.95, $cart_item->getPrice($apple));
     }
 }
 
