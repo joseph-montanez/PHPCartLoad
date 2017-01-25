@@ -12,8 +12,13 @@ The library is MIT, do what you want with it.
 
 This is still alpha and undergoing changes for a better API. The following is to change:
 
- - Move cart item fromArray to a cart item factory
  - Move product getCartXXX to the cart item (Started)
+ - Deal with weight
+ - Events
+ - Shipping API
+   - Initial Support For USPS
+   - Guidelines for more shipping providers
+   - Math stuff for calculating box sizes based on product dimensions and weight
 
 ## Examples
 
