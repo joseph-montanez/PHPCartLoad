@@ -218,7 +218,7 @@ class Item
     public function getPrice(Product $product, \DateTime $now = null)
     {
         $price = $this->getPriceInterface($product, $now);
-        if ($price != null) {
+        if ($price !== null) {
             return $price->getPrice();
         } else {
             return $price;
