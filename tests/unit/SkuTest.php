@@ -26,8 +26,8 @@ class SkuTest extends \Codeception\Test\Unit
     {
         $pen = Product::make([
             'id' => 1,
-            'name' => 'Black Pen',
-            'sku' => 'pen-black',
+            'name' => 'Pen',
+            'sku' => 'pen',
             'price' => 4.95,
             'variations' => [
                 [
@@ -35,30 +35,40 @@ class SkuTest extends \Codeception\Test\Unit
                     'name' => 'Type of Pen',
                     'required' => true,
                     'items' => [
-                        ['id' => 1, 'name' => 'Ballpoint', 'sku' => ['sku' => 'pen-ballpoint-black', 'effect' => SkuInterface::SKU_REPLACE_ALL]],
+                        ['id' => 1, 'name' => 'Ballpoint', 'sku' => 'ballpoint'],
                         ['id' => 2, 'name' => 'Fountain',
                             'price' => 10.95,
                             'price_effect' => PriceInterface::PRICE_REPLACE_ALL,
-                            'sku' => ['sku' => 'pen-fountain-black', 'effect' => SkuInterface::SKU_REPLACE_ALL]
+                            'sku' => ['sku' => 'fountain-black', 'effect' => SkuInterface::SKU_REPLACE_ALL]
                         ],
-                        ['id' => 3, 'name' => 'Gel', 'price' => 4.95, 'sku' => ['sku' => 'pen-gel-black', 'effect' => SkuInterface::SKU_REPLACE_ALL]],
+                        ['id' => 3, 'name' => 'Gel', 'price' => 4.95, 'sku' => 'gel'],
+                    ]
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Color of Pen',
+                    'required' => true,
+                    'items' => [
+                        ['id' => 4, 'name' => 'Blue', 'sku' => 'blue'],
+                        ['id' => 5, 'name' => 'Black', 'sku' => 'black'],
                     ]
                 ],
             ],
         ]);
 
-        //-- Blue Medium Shirt
+        //-- Fountain Pen
         $cartItem = Item::make([
             'id'         => 1,
             'product_id' => 1, // Pen product ID
             'qty'        => 1
         ]);
         $cartItem->addVariation(2);
+        $cartItem->addVariation(4);
 
         $this->assertEquals(1, $cartItem->getId());
 
         $this->assertEquals(10.95, $cartItem->getPrice($pen));
-        //-- TODO: This is failing the replacement feature is not working for SKUs...
+        //-- The SKU should replace the blue sku variant with fountain-black
         $this->assertEquals('pen-fountain-black', $cartItem->getSku($pen));
 
     }

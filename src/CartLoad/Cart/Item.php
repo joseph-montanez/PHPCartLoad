@@ -7,7 +7,8 @@ use CartLoad\Product\Feature\SkuInterface;
 use CartLoad\Product\Price\SimpleFactory;
 use CartLoad\Product\Product;
 
-class Item {
+class Item
+{
     /**
      * @var string|int
      */
@@ -25,7 +26,9 @@ class Item {
      */
     protected $variations;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * @param $data
@@ -39,7 +42,8 @@ class Item {
     /**
      * @return mixed
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -47,7 +51,8 @@ class Item {
      * @param mixed $id
      * @return Item
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
 
         return $this;
@@ -56,7 +61,8 @@ class Item {
     /**
      * @return mixed
      */
-    public function getProductId() {
+    public function getProductId()
+    {
         return $this->product_id;
     }
 
@@ -64,7 +70,8 @@ class Item {
      * @param mixed $product_id
      * @return Item
      */
-    public function setProductId($product_id) {
+    public function setProductId($product_id)
+    {
         $this->product_id = $product_id;
 
         return $this;
@@ -73,7 +80,8 @@ class Item {
     /**
      * @return mixed
      */
-    public function getQty() {
+    public function getQty()
+    {
         return $this->qty;
     }
 
@@ -81,7 +89,8 @@ class Item {
      * @param mixed $qty
      * @return Item
      */
-    public function setQty($qty) {
+    public function setQty($qty)
+    {
         $this->qty = $qty;
 
         return $this;
@@ -90,7 +99,8 @@ class Item {
     /**
      * @return int[]
      */
-    public function getVariations() {
+    public function getVariations()
+    {
         return $this->variations;
     }
 
@@ -98,7 +108,8 @@ class Item {
      * @param int[] $variations
      * @return Item
      */
-    public function setVariations($variations) {
+    public function setVariations($variations)
+    {
         $this->variations = $variations;
 
         return $this;
@@ -107,8 +118,9 @@ class Item {
     /**
      * @param int $id
      */
-    public function addVariation($id) {
-        $this->variations []= $id;
+    public function addVariation($id)
+    {
+        $this->variations [] = $id;
     }
 
 

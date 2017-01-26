@@ -236,8 +236,8 @@ class VariationSet implements SkuInterface
             foreach ($this->getItems() as $item) {
                 foreach ($variation_ids as $variation_id) {
                     if ($item->getId() == $variation_id) {
-                        $sku_effect = $item->getSkuEffect() ?: $this->getSkuEffect();
-                        $sku_delimiter = $item->getSkuDelimiter() ?: $this->getSkuDelimiter();
+                        $sku_effect = $item->getSkuEffect() !== null ? $item->getSkuEffect() : $this->getSkuEffect();
+                        $sku_delimiter = $item->getSkuDelimiter() !== null ? $item->getSkuDelimiter() : $this->getSkuDelimiter();
 
                         if ($sku_effect === SkuInterface::SKU_REPLACE_ALL) {
                             $skus['replaces'] [] = [$item->getSku(), $sku_delimiter];
