@@ -1,7 +1,7 @@
 <?php namespace CartLoad\Product\Option;
 
-use CartLoad\Product\Option\Feature\SkuInterface;
-use CartLoad\Product\Option\Feature\SkuTrait;
+use CartLoad\Product\Feature\SkuInterface;
+use CartLoad\Product\Feature\SkuTrait;
 use CartLoad\Product\Feature\PriceInterface;
 
 class ItemSet implements SkuInterface
@@ -51,30 +51,7 @@ class ItemSet implements SkuInterface
             }, $value['items']);
             $this->setItems($items);
         }
-        if (isset($value['sku'])) {
-            if (is_array($value['sku'])) {
-                if (isset($value['sku']['sku'])) {
-                    $this->setSku($value['sku']['sku']);
-                }
-                if (isset($value['sku']['delimiter'])) {
-                    $this->setSkuDelimiter($value['sku']['delimiter']);
-                } else {
-                    $this->setSkuDelimiter('-');
-                }
-                if (isset($value['sku']['effect'])) {
-                    $this->setSkuEffect($value['sku']['effect']);
-                } else {
-                    $this->setSkuEffect(SkuInterface::SKU_END_OF);
-                }
-            } else {
-                $this->setSku($value['sku']);
-                $this->setSkuDelimiter('-');
-                $this->setSkuEffect(SkuInterface::SKU_END_OF);
-            }
-        } else {
-            $this->setSkuDelimiter('-');
-            $this->setSkuEffect(SkuInterface::SKU_END_OF);
-        }
+        $this->skuFromSku($value);
 
         return $this;
     }

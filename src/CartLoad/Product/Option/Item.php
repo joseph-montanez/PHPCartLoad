@@ -1,8 +1,8 @@
 <?php namespace CartLoad\Product\Option;
 
 use CartLoad\Cart\ItemFactory;
-use CartLoad\Product\Option\Feature\SkuInterface;
-use CartLoad\Product\Option\Feature\SkuTrait;
+use CartLoad\Product\Feature\SkuInterface;
+use CartLoad\Product\Feature\SkuTrait;
 use CartLoad\Product\Feature\PriceInterface;
 use CartLoad\Product\Feature\PriceTrait;
 
@@ -53,23 +53,7 @@ class Item implements SkuInterface, PriceInterface
                 return Item::make($item);
             }, $value['items']));
         }
-        if (isset($value['sku'])) {
-            if (is_object($value['sku'])) {
-                if (isset($value['sku']['sku'])) {
-                    $this->setSku($value['sku']['sku']);
-                }
-                if (isset($value['sku']['delimiter'])) {
-                    $this->setSkuDelimiter($value['sku']['delimiter']);
-                }
-                if (isset($value['sku']['effect'])) {
-                    $this->setSkuEffect($value['sku']['effect']);
-                }
-            } else {
-                $this->setSku($value['sku']);
-                $this->setSkuDelimiter(null);
-                $this->setSkuEffect(null);
-            }
-        }
+        $this->skuFromArray($value);
 
         return $this;
     }

@@ -63,4 +63,35 @@ trait SkuTrait
 
         return $this;
     }
+
+    /**
+     * @param array $value
+     */
+    public function skuFromArray(array $value)
+    {
+        if (isset($value['sku'])) {
+            if (is_array($value['sku'])) {
+                if (isset($value['sku']['sku'])) {
+                    $this->setSku($value['sku']['sku']);
+                }
+                if (isset($value['sku']['delimiter'])) {
+                    $this->setSkuDelimiter($value['sku']['delimiter']);
+                } else {
+                    $this->setSkuDelimiter('-');
+                }
+                if (isset($value['sku']['effect'])) {
+                    $this->setSkuEffect($value['sku']['effect']);
+                } else {
+                    $this->setSkuEffect(SkuInterface::SKU_END_OF);
+                }
+            } else {
+                $this->setSku($value['sku']);
+                $this->setSkuDelimiter(null);
+                $this->setSkuEffect(null);
+            }
+        } else {
+            $this->setSkuDelimiter('-');
+            $this->setSkuEffect(SkuInterface::SKU_END_OF);
+        }
+    }
 }

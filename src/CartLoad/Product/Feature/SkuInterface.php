@@ -39,4 +39,9 @@ interface SkuInterface
      * @return self
      */
     public function setSkuEffect($sku_effect);
+
+    /**
+     * @param array $value
+     */
+    public function skuFromArray(array $value);
 }

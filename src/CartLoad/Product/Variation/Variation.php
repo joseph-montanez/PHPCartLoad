@@ -47,23 +47,7 @@ class Variation implements SkuInterface, PriceInterface
         } else {
             $this->setPriceEffect(PriceInterface::PRICE_COMBINE);
         }
-        if (isset($value['sku'])) {
-            if (is_array($value['sku'])) {
-                if (isset($value['sku']['sku'])) {
-                    $this->setSku($value['sku']['sku']);
-                }
-                if (isset($value['sku']['delimiter'])) {
-                    $this->setSkuDelimiter($value['sku']['delimiter']);
-                }
-                if (isset($value['sku']['effect'])) {
-                    $this->setSkuEffect($value['sku']['effect']);
-                }
-            } else {
-                $this->setSku($value['sku']);
-                $this->setSkuDelimiter(null);
-                $this->setSkuEffect(null);
-            }
-        }
+        $this->skuFromArray($value);
 
         return $this;
     }
