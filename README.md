@@ -24,6 +24,13 @@ This is still alpha and undergoing changes for a better API. The following is to
 
 ## Examples
 
+Here are some examples of what is current available in the library.
+
+ - [Simple Pricing](#simple-pricing)
+ - [Bulk Pricing](#bulk-pricing)
+ - [SKU Variations](#sku-variations)
+ - [Combinations](#combinations)
+
 ### Simple Pricing
 
 This is the Hello World of this library, showing you how little you have to do to start to get the library working with your existing code base.
@@ -123,3 +130,73 @@ SKU Variations, or options are ways to let a base product serve as a platform fo
     $unit_price = $cartItem->getPrice($shirt);
     //-- The resulting SKU is then "shirt-b-m"
     $unit_sku = $cartItem->getSku($shirt);
+    
+### Combinations
+
+Combinations are ways to customize the resulting product variants. This could be as simple as saying a certain product
+configuration is not available, or maybe you need a special price, SKU or weight for a specific combination. Another
+possibility if you need to track stock for the variations, instead these can be linked to individual products for
+greater customizations.
+
+    <?php
+    
+    require_once __DIR__ . '/../vendor/autoload.php';
+    
+    use CartLoad\Product\Product;
+    use CartLoad\Cart\Item;
+    
+    $shirt = Product::make([
+        'id' => 1,
+        'name' => 'Shirt',
+        'sku' => 'shirt',
+        'price' => [
+            ['min_qty' => 1, 'max_qty' => 9, 'price' => 4.95],
+            ['min_qty' => 10, 'max_qty' => 19, 'price' => 3.95],
+        ],
+        'variations' => [
+            [
+                'id' => 1,
+                'name' => 'Color',
+                'required' => true,
+                'items' => [
+                    ['id' => 1, 'name' => 'Red', 'price' => 0.5, 'sku' => 'r'],
+                    ['id' => 2, 'name' => 'Blue', 'price' => 0.4, 'sku' => 'b'],
+                    ['id' => 3, 'name' => 'Green', 'price' => 0.6, 'sku' => 'g'],
+                ]
+            ],
+            [
+                'id' => 2,
+                'name' => 'Size',
+                'required' => true,
+                'items' => [
+                    ['id' => 4, 'name' => 'Small', 'price' => 1.0, 'sku' => 's'],
+                    ['id' => 5, 'name' => 'Medium', 'price' => 1.1, 'sku' => 'm'],
+                    ['id' => 6, 'name' => 'Large', 'price' => 1.2, 'sku' => 'l'],
+                ]
+            ],
+        ],
+        'combinations' => [
+            //-- Blue Medium Shirt on Sale with special SKU to track all blue shirt sales in main system
+            [
+                'id' => 1,
+                'variations' => [2, 5],
+                'price' => 5.00,
+                'sku' => 'shirt-b-m-sale',
+            ]
+        ]
+    ]);
+    
+    //-- Blue Medium Shirt
+    $cartItem = Item::make([
+        'id'         => 1,
+        'product_id' => 1, //Shirt product ID
+        'qty'        => 1,
+        'variations' => [2, 5] // Blue, Medium
+    ]);
+    
+    //-- The unit price of a blue medium shirt is 5.00
+    $unit_price = $shirt->getCartPrice($cartItem);
+    //-- The resulting SKU is then "shirt-b-m-sale"
+    $unit_sku = $shirt->getCartSku($cartItem);
+    
+    echo $unit_sku, ' - ', $unit_price;
