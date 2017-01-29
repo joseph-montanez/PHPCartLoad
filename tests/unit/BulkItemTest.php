@@ -1,7 +1,6 @@
 <?php
 use CartLoad\Cart\Item;
 use CartLoad\Product\Product;
-use CartLoad\Product\ProductFactory;
 
 class BulkItemTest extends \Codeception\Test\Unit
 {

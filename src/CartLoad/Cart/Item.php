@@ -134,9 +134,6 @@ class Item
     public function getProductCombination(Product $product)
     {
         $cart_item_variations = $this->getVariations();
-        if (count($cart_item_variations) === 0) {
-            return null;
-        }
 
         //-- Sort to use array equality
         sort($cart_item_variations);
@@ -209,21 +206,13 @@ class Item
             }
         }
 
-        if (!$price instanceof PriceInterface) {
-            return (new SimpleFactory())->make($price);
-        }
-
-        return $price;
+        return (new SimpleFactory())->make($price);
     }
 
     public function getPrice(Product $product, \DateTime $now = null)
     {
         $price = $this->getPriceInterface($product, $now);
-        if ($price !== null) {
-            return $price->getPrice();
-        } else {
-            return $price;
-        }
+        return $price->getPrice();
     }
 
 

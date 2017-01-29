@@ -1,8 +1,5 @@
 <?php namespace CartLoad\Product;
 
-use CartLoad\Cart\Item;
-use CartLoad\Product\Feature\PriceInterface;
-use CartLoad\Product\Feature\SkuInterface;
 use CartLoad\Product\Variation\VariationSet;
 
 class Product
@@ -26,6 +23,7 @@ class Product
 
     public function __construct()
     {
+        $this->price_table = new PriceTable();
     }
 
     /**
@@ -123,7 +121,8 @@ class Product
      */
     public function getPrice($qty = 1)
     {
-        $price_list = $this->getPriceTable()->getPrices($qty);
+        $price_table = $this->getPriceTable();
+        $price_list = $price_table->getPrices($qty);
         if (count($price_list) > 0) {
             return current($price_list)->getPrice();
         } else {
