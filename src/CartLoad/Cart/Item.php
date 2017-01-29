@@ -116,7 +116,8 @@ class Item
     }
 
     /**
-     * @param int $id
+     * Add the ID of the variation item, can be a string or integer
+     * @param int|string $id
      */
     public function addVariation($id)
     {
@@ -288,20 +289,31 @@ class Item
             } else {
                 //-- Prepend anything to the beginning of the SKU
                 if (count($sku_list['starts']) > 0) {
-                    $sku = array_reduce($sku_list['starts'], function ($result, $sku_data) use ($default_delimiter) {
-                        list($sku, $delimiter) = $sku_data;
-                        if ($delimiter === null) {
-                            $delimiter = $default_delimiter;
+                    $sku_starts = array_reduce($sku_list['starts'], function ($result, $sku_data) use ($default_delimiter) {
+                        list($starts_sku, $starts_delimiter) = $sku_data;
+                        if ($starts_delimiter === null) {
+                            $starts_delimiter = $default_delimiter;
                         }
 
                         if (strlen($result) > 0) {
-                            $result = implode($delimiter, [$sku, $result]);
+                            $sku_parts = [$starts_sku, $result];
+                            $filtered_sku_parts = array_filter($sku_parts, function ($var) {
+                                return $var !== null && $var !== false;
+                            });
+                            $result = implode($starts_delimiter, $filtered_sku_parts);
                         } else {
-                            $result = $sku;
+                            $result = $starts_sku;
                         }
 
                         return $result;
-                    }, $sku);
+                    }, '');
+
+
+                    $sku_parts = [$sku, $sku_starts];
+                    $filtered_sku_parts = array_filter($sku_parts, function ($var) {
+                        return $var !== null && $var !== false;
+                    });
+                    $sku = implode($default_delimiter, $filtered_sku_parts);
                 }
 
                 //-- Append anything to the beginning of the SKU
