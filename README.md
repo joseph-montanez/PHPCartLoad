@@ -11,16 +11,22 @@ The library is MIT, do what you want with it.
 
 ## To Do
 
-This is still alpha and undergoing changes for a better API. The following is to change:
+This is still alpha and undergoing changes for a better API. The following is to come:
 
+ - Reach 100% code coverage
  - Create tests for weight
- - Cart Container API
- - Validation / Contract Based Programming
- - Events
+ - Finish Cart API
+ - Consider multi-currency, multi-lingual support
+ - Stock API
+   - In Stock
+   - Drop Shipped
+   - Back Ordered (Including support for limiting to the amount back ordered)
  - Shipping API
    - Initial Support For USPS
    - Guidelines for more shipping providers
    - Math stuff for calculating box sizes based on product dimensions and weight
+ - Order API
+ - Invoice API
 
 ## Examples
 
