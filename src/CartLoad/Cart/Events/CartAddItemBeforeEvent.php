@@ -57,17 +57,6 @@ class CartAddItemBeforeEvent extends Event
     }
 
     /**
-     * @param \string[] $errors
-     * @return CartAddItemBeforeEvent
-     */
-    public function setErrors($errors)
-    {
-        $this->stopPropagation();
-        $this->errors = $errors;
-        return $this;
-    }
-
-    /**
      * @param $error
      * @return CartAddItemBeforeEvent
      */

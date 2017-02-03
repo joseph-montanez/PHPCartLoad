@@ -17,7 +17,12 @@ class Container
     /**
      * @var Item[]
      */
-    protected $items;
+    protected $items = [];
+
+    /**
+     * @var string[]
+     */
+    protected $errors = [];
 
     public function __construct()
     {
@@ -42,6 +47,10 @@ class Container
         $event = new CartAddItemBeforeEvent($this, $item);
         $this->dispatcher->dispatch(CartAddItemBeforeEvent::NAME, $event);
 
+        if ($event->hasErrors()) {
+            $this->addErrors($event->getErrors());
+        }
+
         if ($event->isPropagationStopped()) {
             return false;
         } else {
@@ -56,5 +65,41 @@ class Container
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * @param string[] $errors
+     */
+    public function addErrors(array $errors)
+    {
+        foreach ($errors as $error) {
+            $this->addError($error);
+        }
+    }
+
+    /**
+     * @param $error
+     * @return $this
+     */
+    public function addError($error)
+    {
+        $this->errors []= $error;
+
+        return $this;
+    }
+
+    /**
+     * @return \string[]
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    public function clearErrors()
+    {
+        $this->errors = [];
+
+        return $this;
     }
 }

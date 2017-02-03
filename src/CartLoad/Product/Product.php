@@ -30,11 +30,12 @@ class Product
      * Use the product factory method to make a product based off an array
      *
      * @param array $data
+     * @param Product $product
      * @return Product
      */
-    public static function make(array $data = [])
+    public static function make(array $data = [], Product $product = null)
     {
-        return (new ProductFactory())->make($data);
+        return (new ProductFactory())->make($data, $product);
     }
 
     /**

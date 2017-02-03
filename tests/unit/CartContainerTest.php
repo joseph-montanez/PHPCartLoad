@@ -41,14 +41,17 @@ class CartContainerTest extends \Codeception\Test\Unit
 
         $this->assertFalse($added);
         $this->assertEquals(0, count($cart->getItems()));
+        $this->assertEquals('Sorry the limit is 2 per customer', $cart->getErrors()[0]);
 
 
         //-- Let make this able to add to cart now
+        $cart->clearErrors();
         $item->setQty(2);
         $added = $cart->addItem($item);
 
         $this->assertTrue($added);
         $this->assertEquals(1, count($cart->getItems()));
+        $this->assertEquals(0, count($cart->getErrors()));
 
     }
 }
