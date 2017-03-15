@@ -71,12 +71,12 @@ class Container
 
     /**
      * Get the item in the respository, if there is no match, return null
-     * @param Item $item
+     * @param string $id
      * @return Item|null
      */
-    public function findItem(Item $item)
+    public function findItem($id)
     {
-        return $this->repository->findItem($item);
+        return $this->repository->findItem($id);
     }
 
     /**

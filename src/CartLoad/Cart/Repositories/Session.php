@@ -79,13 +79,19 @@ class Session implements Repository
 
     /**
      * Get the item in the respository, if there is no match, return null
-     * @param Item $item
+     * @param string $id
      * @return mixed|null
      */
-    public function findItem(Item $item)
+    public function findItem($id)
     {
         $items = $this->getItems();
-        $index = array_search($item, $items);
+        $index = null;
+        foreach ($items as $i => $item) {
+            if ($item->getId() === $id) {
+                $index = $i;
+                break;
+            }
+        }
 
         return $index ? $items[$index] : null;
     }
