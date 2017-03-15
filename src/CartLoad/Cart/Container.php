@@ -4,6 +4,7 @@ namespace CartLoad\Cart;
 
 
 use CartLoad\Cart\Events\CartAddItemBeforeEvent;
+use CartLoad\Cart\Repositories\Session;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Container
@@ -15,17 +16,18 @@ class Container
     protected $dispatcher;
 
     /**
-     * @var Item[]
+     * @var Repository
      */
-    protected $items = [];
+    protected $repository = null;
 
     /**
      * @var string[]
      */
     protected $errors = [];
 
-    public function __construct()
+    public function __construct(Repository $repository = null)
     {
+        $this->repository = $this->repository === null ? new Session() : $repository;
         $this->dispatcher = new EventDispatcher();
     }
 
@@ -54,7 +56,7 @@ class Container
         if ($event->isPropagationStopped()) {
             return false;
         } else {
-            $this->items []= $item;
+            $this->repository->addItem($item);
             return true;
         }
     }
@@ -64,7 +66,7 @@ class Container
      */
     public function getItems()
     {
-        return $this->items;
+        return $this->repository->getItems();
     }
 
     /**
