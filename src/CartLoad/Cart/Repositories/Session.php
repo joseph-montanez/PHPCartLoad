@@ -73,7 +73,7 @@ class Session implements Repository
             $_SESSION[$this->namespace]['items'] = $items;
 
         } else {
-            $_SESSION['items'] []= $items;
+            $_SESSION['items'] = $items;
         }
     }
 
