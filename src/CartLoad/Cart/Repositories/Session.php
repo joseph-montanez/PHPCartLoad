@@ -93,6 +93,6 @@ class Session implements Repository
             }
         }
 
-        return $index ? $items[$index] : null;
+        return $index !== null ? $items[$index] : null;
     }
 }
