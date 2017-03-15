@@ -76,4 +76,17 @@ class Session implements Repository
             $_SESSION['items'] []= $items;
         }
     }
+
+    /**
+     * Get the item in the respository, if there is no match, return null
+     * @param Item $item
+     * @return mixed|null
+     */
+    public function findItem(Item $item)
+    {
+        $items = $this->getItems();
+        $index = array_search($item, $items);
+
+        return $index ? $items[$index] : null;
+    }
 }

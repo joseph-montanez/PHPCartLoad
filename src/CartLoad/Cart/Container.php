@@ -70,6 +70,16 @@ class Container
     }
 
     /**
+     * Get the item in the respository, if there is no match, return null
+     * @param Item $item
+     * @return Item|null
+     */
+    public function findItem(Item $item)
+    {
+        return $this->repository->findItem($item);
+    }
+
+    /**
      * @param string[] $errors
      */
     public function addErrors(array $errors)

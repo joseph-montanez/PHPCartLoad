@@ -16,5 +16,6 @@ interface Repository
     public function deleteItem(Item $item);
     public function getItems();
     public function setItems($item);
+    public function findItem(Item $item);
 
 }
