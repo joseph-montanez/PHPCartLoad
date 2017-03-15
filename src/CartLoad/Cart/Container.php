@@ -79,6 +79,11 @@ class Container
         return $this->repository->findItem($id);
     }
 
+    public function deleteItem(Item $item)
+    {
+        return $this->repository->deleteItem($item);
+    }
+
     /**
      * @param string[] $errors
      */
