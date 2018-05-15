@@ -9,7 +9,7 @@ class PriceTable
 {
     /**
      * A list of prices
-     * @var array $prices
+     * @var PriceInterface[] $prices
      */
     protected $prices;
 

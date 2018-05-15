@@ -3,3 +3,4 @@ composer.phar
 tests/_output
 docs/_build
 docs/*.pyc
+.idea/

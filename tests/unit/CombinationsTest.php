@@ -20,7 +20,7 @@ class CombinationsTest extends \Codeception\Test\Unit
     }
 
     // tests
-    public function testMe()
+    public function testGeneral()
     {
         $shirt = (new ProductFactory)->make([
             'id' => 1,
@@ -74,5 +74,22 @@ class CombinationsTest extends \Codeception\Test\Unit
         $this->assertEquals(7.00, $cartItem->getPrice($shirt));
         $this->assertEquals('shirt-blue-media', $cartItem->getSku($shirt));
 
+    }
+
+    /**
+     * Test basic getters and setters
+     */
+    public function testGettersSetters() {
+        $combo = new \CartLoad\Product\Combination();
+        $price = new \CartLoad\Product\Price\Simple(5.00);
+
+        $combo->setId(1);
+        $combo->setPrice($price);
+        $combo->setSku('p0001');
+        $combo->setVariations([2, 5]);
+        $this->assertEquals($combo->getId(), 1);
+        $this->assertEquals($combo->getPrice(), $price);
+        $this->assertEquals($combo->getSku(), 'p0001');
+        $this->assertEquals($combo->getVariations(), [2, 5]);
     }
 }

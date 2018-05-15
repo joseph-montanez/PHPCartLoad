@@ -13,6 +13,7 @@ PHPCartLoad Documentation
 
    overview
    quickstart
+   cart-events
 
 
 

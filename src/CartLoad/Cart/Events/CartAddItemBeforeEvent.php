@@ -4,10 +4,12 @@ namespace CartLoad\Cart\Events;
 
 use CartLoad\Cart\Container;
 use CartLoad\Cart\Item;
+use CartLoad\Cart\Errors;
 use Symfony\Component\EventDispatcher\Event;
 
 class CartAddItemBeforeEvent extends Event
 {
+    use Errors;
 
     const NAME = 'cart.add_item.before';
 
@@ -20,11 +22,6 @@ class CartAddItemBeforeEvent extends Event
      * @var Item
      */
     protected $item;
-
-    /**
-     * @var \string[]
-     */
-    protected $errors = [];
 
     public function __construct(Container $cart, Item $item)
     {
@@ -48,28 +45,21 @@ class CartAddItemBeforeEvent extends Event
         return $this->item;
     }
 
-    /**
-     * @return \string[]
-     */
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
+    //------------------------------------------------------------------------------------------------------------------
+    //-- Custom Errors
+    //------------------------------------------------------------------------------------------------------------------
     /**
      * @param $error
      * @return CartAddItemBeforeEvent
      */
-    public function addError($error)
+    public function addError($error, $key = false)
     {
         $this->stopPropagation();
-        $this->errors []= $error;
+        if ($key) {
+            $this->errors [$key]= $error;
+        } else {
+            $this->errors []= $error;
+        }
         return $this;
     }
-
-    public function hasErrors()
-    {
-        return count($this->errors) > 0;
-    }
-
 }

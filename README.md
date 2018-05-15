@@ -206,3 +206,11 @@ greater customizations.
     $unit_sku = $shirt->getCartSku($cartItem);
     
     echo $unit_sku, ' - ', $unit_price;
+    
+## How To Build The Documentation
+
+You will need python install on your computer.
+
+    cd docs
+    pip install -r requirements.txt
+    make

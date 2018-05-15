@@ -4,11 +4,14 @@ namespace CartLoad\Cart;
 
 
 use CartLoad\Cart\Events\CartAddItemBeforeEvent;
+use CartLoad\Cart\Events\CartGetItemAfterEvent;
+use CartLoad\Cart\Events\CartGetItemsAfterEvent;
 use CartLoad\Cart\Repositories\Session;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Container
 {
+    use Errors;
 
     /**
      * @var EventDispatcher
@@ -19,11 +22,6 @@ class Container
      * @var Repository
      */
     protected $repository = null;
-
-    /**
-     * @var string[]
-     */
-    protected $errors = [];
 
     public function __construct(Repository $repository = null)
     {
@@ -66,7 +64,29 @@ class Container
      */
     public function getItems()
     {
-        return $this->repository->getItems();
+        $items = $this->repository->getItems();
+
+        //-- Call get item event
+        foreach ($items as $item) {
+            $event = new CartGetItemAfterEvent($this, $item);
+            $this->dispatcher->dispatch(CartGetItemAfterEvent::NAME, $event);
+
+
+            if ($event->hasErrors()) {
+                $item->addErrors($event->getErrors());
+            }
+        }
+        unset($event);
+
+        //-- Call get items event
+        $event = new CartGetItemsAfterEvent($this, $this->repository->getItems());
+        $this->dispatcher->dispatch(CartGetItemsAfterEvent::NAME, $event);
+
+        if ($event->hasErrors()) {
+            $this->addErrors($event->getErrors());
+        }
+
+        return $items;
     }
 
     /**
@@ -84,38 +104,25 @@ class Container
         return $this->repository->deleteItem($item);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    //-- Custom Errors
+    //------------------------------------------------------------------------------------------------------------------
     /**
-     * @param string[] $errors
-     */
-    public function addErrors(array $errors)
-    {
-        foreach ($errors as $error) {
-            $this->addError($error);
-        }
-    }
-
-    /**
-     * @param $error
+     * Clears errors in container and its child items
+     *
      * @return $this
      */
-    public function addError($error)
-    {
-        $this->errors []= $error;
-
-        return $this;
-    }
-
-    /**
-     * @return \string[]
-     */
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
     public function clearErrors()
     {
         $this->errors = [];
+
+        /**
+         * @var $items Item[]
+         */
+        $items = $this->repository->getItems();
+        foreach ($items as $item) {
+            $item->clearErrors();
+        }
 
         return $this;
     }

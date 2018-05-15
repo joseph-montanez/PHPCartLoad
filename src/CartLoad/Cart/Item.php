@@ -9,6 +9,8 @@ use CartLoad\Product\Product;
 
 class Item
 {
+    use Errors;
+
     /**
      * @var string|int
      */
