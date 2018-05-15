@@ -2,6 +2,8 @@
 
 
 use CartLoad\Cart\Item;
+use CartLoad\Product\Feature\PriceInterface;
+use CartLoad\Product\Feature\SkuInterface;
 use CartLoad\Product\Product;
 
 class VariationsTest extends \Codeception\Test\Unit
@@ -71,5 +73,34 @@ class VariationsTest extends \Codeception\Test\Unit
         $blue_variation = $shirt->getVariations()[0]->getItems()[1];
         $blue_variation->setSkuDelimiter('/');
         $this->assertEquals('shirt/b-m', $cartItem->getSku($shirt));
+    }
+
+    public function testGetterSetterFactory()
+    {
+
+
+        $variation = new CartLoad\Product\Variation\Variation();
+        $variation->fromArray([
+            'id' => 1,
+            'name' => 'Red',
+            'required' => false,
+            'order' => 1,
+            'price' => 1.00,
+            'price_effect' => PriceInterface::PRICE_REPLACE_ALL,
+            'sku' => [
+                'sku' => 'apple-red',
+                'delimiter' => '|',
+                'effect' => SkuInterface::SKU_REPLACE_ALL
+            ],
+        ]);
+
+
+        $this->assertEquals(1, $variation->getId());
+        $this->assertEquals('Red', $variation->getName());
+        $this->assertEquals(false, $variation->getRequired());
+        $this->assertEquals(1, $variation->getOrder());
+        $this->assertEquals(1.00, $variation->getPrice());
+        $this->assertEquals(PriceInterface::PRICE_REPLACE_ALL, $variation->getPriceEffect());
+        $this->assertEquals(SkuInterface::SKU_REPLACE_ALL, $variation->getSkuEffect());
     }
 }
