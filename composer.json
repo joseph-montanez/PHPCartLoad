@@ -1,7 +1,7 @@
 {
   "name": "joseph-montanez/phpcartload",
   "description": "Standalone shopping cart",
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
     {
