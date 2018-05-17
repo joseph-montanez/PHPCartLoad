@@ -19,7 +19,7 @@ class CartGetItemsAfterEvent extends Event
     protected $cart;
 
     /**
-     * @var Item[]
+     * @var \CartLoad\Cart\Item[]
      */
     protected $items;
 
@@ -38,7 +38,7 @@ class CartGetItemsAfterEvent extends Event
     }
 
     /**
-     * @return Item[]
+     * @return \CartLoad\Cart\Item[]
      */
     public function getItems()
     {
@@ -49,8 +49,10 @@ class CartGetItemsAfterEvent extends Event
     //-- Custom Errors
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * @param $error
-     * @return CartAddItemBeforeEvent
+     * @param mixed $error
+     * @param bool $key
+     *
+     * @return self
      */
     public function addError($error, $key = false)
     {

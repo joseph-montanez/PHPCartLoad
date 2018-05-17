@@ -50,7 +50,9 @@ class CartAddItemBeforeEvent extends Event
     //------------------------------------------------------------------------------------------------------------------
     /**
      * @param $error
-     * @return CartAddItemBeforeEvent
+     * @param bool $key
+     *
+     * @return self
      */
     public function addError($error, $key = false)
     {
