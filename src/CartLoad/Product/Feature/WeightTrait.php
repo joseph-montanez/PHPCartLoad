@@ -47,4 +47,22 @@ trait WeightTrait
         return $this;
     }
 
+    /**
+     * @param array $value
+     *
+     * @return WeightTrait
+     */
+    public function weightFromArray(array $value)
+    {
+        if (isset($value['weight'])) {
+            $this->setWeight($value['weight']);
+        }
+        if (isset($value['weight_effect'])) {
+            $this->setWeightEffect($value['weight_effect']);
+        } else {
+            $this->setWeightEffect(PriceInterface::PRICE_COMBINE);
+        }
+
+        return $this;
+    }
 }

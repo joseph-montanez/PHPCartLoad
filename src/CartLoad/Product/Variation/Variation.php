@@ -4,10 +4,12 @@ use CartLoad\Product\Feature\PriceInterface;
 use CartLoad\Product\Feature\PriceTrait;
 use CartLoad\Product\Feature\SkuInterface;
 use CartLoad\Product\Feature\SkuTrait;
+use CartLoad\Product\Feature\WeightInterface;
+use CartLoad\Product\Feature\WeightTrait;
 
-class Variation implements SkuInterface, PriceInterface
+class Variation implements SkuInterface, PriceInterface, WeightInterface
 {
-    use SkuTrait, PriceTrait;
+    use SkuTrait, PriceTrait, WeightTrait;
 
     protected $id;
     protected $name;
@@ -39,14 +41,8 @@ class Variation implements SkuInterface, PriceInterface
         if (isset($value['order'])) {
             $this->setOrder($value['order']);
         }
-        if (isset($value['price'])) {
-            $this->setPrice($value['price']);
-        }
-        if (isset($value['price_effect'])) {
-            $this->setPriceEffect($value['price_effect']);
-        } else {
-            $this->setPriceEffect(PriceInterface::PRICE_COMBINE);
-        }
+        $this->priceFromArray($value);
+        $this->weightFromArray($value);
         $this->skuFromArray($value);
 
         return $this;

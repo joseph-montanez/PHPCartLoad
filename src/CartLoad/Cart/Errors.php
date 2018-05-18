@@ -12,6 +12,7 @@ trait Errors
 
     /**
      * Add multiple errors
+     *
      * @param string[] $errors
      */
     public function addErrors(array $errors)
@@ -23,15 +24,18 @@ trait Errors
 
     /**
      * Add an error
+     *
      * @param $error
+     * @param bool $key
+     *
      * @return $this
      */
     public function addError($error, $key = false)
     {
         if ($key) {
-            $this->errors [$key]= $error;
+            $this->errors [$key] = $error;
         } else {
-            $this->errors []= $error;
+            $this->errors [] = $error;
         }
 
         return $this;
@@ -57,6 +61,9 @@ trait Errors
 
     /**
      * Check to see if there is error by the key
+     *
+     * @param $key
+     *
      * @return \bool
      */
     public function hasError($key)
@@ -77,7 +84,9 @@ trait Errors
 
     /**
      * Get an error by its key
+     *
      * @param $key
+     *
      * @return bool|string
      */
     public function getErrorByKey($key)

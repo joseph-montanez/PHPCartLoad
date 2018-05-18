@@ -13,6 +13,7 @@ interface WeightInterface
 
     /**
      * @param float $weight
+     *
      * @return self
      */
     public function setWeight($weight);
@@ -24,7 +25,15 @@ interface WeightInterface
 
     /**
      * @param int $weight_effect
+     *
      * @return self
      */
     public function setWeightEffect($weight_effect);
+
+    /**
+     * @param array $value
+     *
+     * @return WeightTrait
+     */
+    public function weightFromArray(array $value);
 }

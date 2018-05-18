@@ -13,7 +13,27 @@ interface PriceInterface
 
     /**
      * @param float $price
+     *
      * @return self
      */
     public function setPrice($price);
+
+    /**
+     * @return int
+     */
+    public function getPriceEffect();
+
+    /**
+     * @param int $price_effect
+     *
+     * @return PriceTrait
+     */
+    public function setPriceEffect($price_effect);
+
+    /**
+     * @param array $value
+     *
+     * @return PriceTrait
+     */
+    public function priceFromArray(array $value);
 }

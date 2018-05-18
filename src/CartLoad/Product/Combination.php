@@ -21,6 +21,8 @@ class Combination
     protected $price;
     /** @var string The resulting stock keeping unit of the variation */
     protected $sku;
+    /** @var string The resulting weight of the variation */
+    protected $weight;
 
     /**
      * @return int|string
@@ -91,6 +93,24 @@ class Combination
     public function setSku($sku)
     {
         $this->sku = $sku;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @param float $weight
+     * @return Combination
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
         return $this;
     }
 
