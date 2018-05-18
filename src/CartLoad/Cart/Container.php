@@ -6,7 +6,7 @@ namespace CartLoad\Cart;
 use CartLoad\Cart\Events\CartAddItemBeforeEvent;
 use CartLoad\Cart\Events\CartGetItemAfterEvent;
 use CartLoad\Cart\Events\CartGetItemsAfterEvent;
-use CartLoad\Cart\Repositories\Session;
+use CartLoad\Cart\Repositories\SessionRepository;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Container
@@ -19,13 +19,14 @@ class Container
     protected $dispatcher;
 
     /**
-     * @var Repository
+     * @var RepositoryInterface
      */
     protected $repository = null;
 
-    public function __construct(Repository $repository = null)
+    public function __construct(RepositoryInterface $repository = null)
     {
-        $this->repository = $this->repository === null ? new Session() : $repository;
+        $this->repository = $repository === null ? new SessionRepository() : $repository;
+
         $this->dispatcher = new EventDispatcher();
     }
 
@@ -41,9 +42,11 @@ class Container
 
     /**
      * @param Item $item
+     *
      * @return bool
      */
-    public function addItem(Item $item) {
+    public function addItem(Item $item)
+    {
         $event = new CartAddItemBeforeEvent($this, $item);
         $this->dispatcher->dispatch(CartAddItemBeforeEvent::NAME, $event);
 
@@ -55,6 +58,7 @@ class Container
             return false;
         } else {
             $this->repository->addItem($item);
+
             return true;
         }
     }
@@ -90,8 +94,10 @@ class Container
     }
 
     /**
-     * Get the item in the respository, if there is no match, return null
+     * Get the item in the repository, if there is no match, return null
+     *
      * @param string $id
+     *
      * @return Item|null
      */
     public function findItem($id)
@@ -99,6 +105,13 @@ class Container
         return $this->repository->findItem($id);
     }
 
+    /**
+     * Delete an item from the repository.
+     *
+     * @param Item $item
+     *
+     * @return bool
+     */
     public function deleteItem(Item $item)
     {
         return $this->repository->deleteItem($item);
@@ -123,6 +136,26 @@ class Container
         foreach ($items as $item) {
             $item->clearErrors();
         }
+
+        return $this;
+    }
+
+    /**
+     * @return RepositoryInterface
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
+     * @param RepositoryInterface $repository
+     *
+     * @return Container
+     */
+    public function setRepository($repository)
+    {
+        $this->repository = $repository;
 
         return $this;
     }

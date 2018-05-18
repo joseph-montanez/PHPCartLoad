@@ -2,10 +2,10 @@
 
 namespace CartLoad\Cart\Repositories;
 
-use CartLoad\Cart\Repository;
 use CartLoad\Cart\Item;
+use CartLoad\Cart\RepositoryInterface;
 
-class Session implements Repository
+class SessionRepository implements RepositoryInterface
 {
     public $items = [];
     public $namespace = '';
@@ -15,8 +15,17 @@ class Session implements Repository
         $this->namespace = $namespace;
     }
 
+    /**
+     * @param \CartLoad\Cart\Item $item
+     *
+     * @return bool
+     */
     public function addItem(Item $item)
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            return false;
+        }
+
         if (strlen($this->namespace) > 0) {
             if (!isset($_SESSION[$this->namespace])) {
                 $_SESSION[$this->namespace] = [];
@@ -25,17 +34,23 @@ class Session implements Repository
                 $_SESSION[$this->namespace]['items'] = [];
             }
 
-            $_SESSION[$this->namespace]['items'] []= $item;
+            $_SESSION[$this->namespace]['items'] [] = $item;
         } else {
             if (!isset($_SESSION['items'])) {
                 $_SESSION['items'] = [];
             }
 
-            $_SESSION['items'] []= $item;
-
+            $_SESSION['items'] [] = $item;
         }
+
+        return true;
     }
 
+    /**
+     * @param Item $item
+     *
+     * @return bool
+     */
     public function deleteItem(Item $item)
     {
         $items = $this->getItems();
@@ -44,7 +59,10 @@ class Session implements Repository
         if ($index !== false) {
             unset($items[$index]);
             $this->setItems($items);
+            return true;
         }
+
+        return false;
     }
 
     public function getItems()
@@ -78,8 +96,10 @@ class Session implements Repository
     }
 
     /**
-     * Get the item in the respository, if there is no match, return null
+     * Get the item in the repository, if there is no match, return null
+     *
      * @param string $id
+     *
      * @return mixed|null
      */
     public function findItem($id)

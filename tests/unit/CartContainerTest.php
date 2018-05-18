@@ -21,7 +21,10 @@ class CartContainerTest extends \Codeception\Test\Unit
 
     public function testAddBeforeEvent()
     {
-        $cart = new Container();
+        $repository = new \CartLoad\Cart\Repositories\ArrayRepository();
+        $cart = new Container($repository);
+
+        $this->assertEquals(true, $cart->getRepository() instanceof \CartLoad\Cart\Repositories\ArrayRepository);
 
         //-- Add the event listener
         $cart->addListener(CartAddItemBeforeEvent::NAME, function (CartAddItemBeforeEvent $event) {
