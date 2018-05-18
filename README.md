@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/joseph-montanez/PHPCartLoad/branch/master/graph/badge.svg)](https://codecov.io/gh/joseph-montanez/PHPCartLoad)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/326e83e2-7e5b-4071-a44d-a3ce71117982/mini.png)](https://insight.sensiolabs.com/projects/326e83e2-7e5b-4071-a44d-a3ce71117982)
 
-PHPCartLoad is a library intended to help build shopping carts and general e-commerce applications. This library is to provide a foundation of easy to use classes to manage inventory pricing and carts. There is zero database requirements and is completely data driven.
+Inspired by [Satchless](http://satchless.com/) for Python, PHPCartLoad is a feature rich library intended to help build shopping carts and general e-commerce applications. This library is to provide a foundation of easy to use classes to manage inventory pricing and carts. There is zero database requirements and is completely data driven.
 
 ## License
 
