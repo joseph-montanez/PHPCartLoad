@@ -68,10 +68,10 @@ class Container
      */
     public function getItems()
     {
-        $items = $this->repository->getItems();
+        $items = [];
 
         //-- Call get item event
-        foreach ($items as $item) {
+        foreach ($this->repository->getItems() as $item) {
             $event = new CartGetItemAfterEvent($this, $item);
             $this->dispatcher->dispatch(CartGetItemAfterEvent::NAME, $event);
 
@@ -79,6 +79,8 @@ class Container
             if ($event->hasErrors()) {
                 $item->addErrors($event->getErrors());
             }
+
+            $items[] = $item;
         }
         unset($event);
 

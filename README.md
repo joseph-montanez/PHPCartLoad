@@ -16,6 +16,10 @@ This is still alpha and undergoing changes for a better API. The following is to
  - Reach 100% code coverage
  - Create tests for weight
  - Finish Cart API
+    - Additional events for find, delete
+    - Provide default duplicate logic
+    - Taxes or just any price breakdown per item
+    - Discounts, coupons via Pricing Rules (Mangento does a good job here)
  - Consider multi-currency, multi-lingual support
  - Stock API
    - In Stock

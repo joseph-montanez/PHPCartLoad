@@ -9,7 +9,9 @@ use Symfony\Component\EventDispatcher\Event;
 
 class CartAddItemBeforeEvent extends Event
 {
-    use Errors;
+    use Errors {
+        addError as protected traitAddError;
+    }
 
     const NAME = 'cart.add_item.before';
 
@@ -57,11 +59,6 @@ class CartAddItemBeforeEvent extends Event
     public function addError($error, $key = false)
     {
         $this->stopPropagation();
-        if ($key) {
-            $this->errors [$key]= $error;
-        } else {
-            $this->errors []= $error;
-        }
-        return $this;
+        return $this->traitAddError($error, $key);
     }
 }
