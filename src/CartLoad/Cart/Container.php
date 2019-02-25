@@ -4,6 +4,8 @@ namespace CartLoad\Cart;
 
 
 use CartLoad\Cart\Events\CartAddItemBeforeEvent;
+use CartLoad\Cart\Events\CartDeleteItemAfterEvent;
+use CartLoad\Cart\Events\CartDeleteItemBeforeEvent;
 use CartLoad\Cart\Events\CartGetItemAfterEvent;
 use CartLoad\Cart\Events\CartGetItemsAfterEvent;
 use CartLoad\Cart\Repositories\SessionRepository;
@@ -25,7 +27,7 @@ class Container
 
     public function __construct(RepositoryInterface $repository = null)
     {
-        $this->repository = $repository === null ? new SessionRepository() : $repository;
+        $this->setRepository($repository === null ? new SessionRepository() : $repository);
 
         $this->dispatcher = new EventDispatcher();
     }
@@ -116,7 +118,22 @@ class Container
      */
     public function deleteItem(Item $item)
     {
-        return $this->repository->deleteItem($item);
+        //-- Call before delete items event
+        $event = new CartDeleteItemBeforeEvent($this, $item);
+        $dispatchedEvent = $this->dispatcher->dispatch(CartDeleteItemBeforeEvent::NAME, $event);
+
+        //-- If some event stopped this delete function, return false
+        if ($dispatchedEvent->isPropagationStopped()) {
+            return false;
+        }
+
+        $results = $this->repository->deleteItem($item);
+
+        //-- Call before delete items event
+        $event = new CartDeleteItemAfterEvent($this, $item);
+        $dispatchedEvent = $this->dispatcher->dispatch(CartDeleteItemAfterEvent::NAME, $event);
+
+        return $results;
     }
 
     //------------------------------------------------------------------------------------------------------------------

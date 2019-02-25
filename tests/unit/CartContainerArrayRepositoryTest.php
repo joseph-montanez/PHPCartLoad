@@ -2,10 +2,13 @@
 
 use CartLoad\Cart\Container;
 use CartLoad\Cart\Events\CartAddItemBeforeEvent;
+use CartLoad\Cart\Events\CartDeleteItemAfterEvent;
+use CartLoad\Cart\Events\CartDeleteItemBeforeEvent;
 use CartLoad\Cart\Events\CartGetItemAfterEvent;
+use CartLoad\Cart\Events\CartGetItemsAfterEvent;
 use CartLoad\Cart\Item;
 
-class CartContainerTest extends \Codeception\Test\Unit
+class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
@@ -99,6 +102,22 @@ class CartContainerTest extends \Codeception\Test\Unit
             $this->assertTrue($cart instanceof Container);
         });
 
+        //-- Add the event listener
+        $cart->addListener(CartGetItemsAfterEvent::NAME, function (CartGetItemsAfterEvent $event) {
+            /**
+             * @var $item CartLoad\Cart\Item
+             */
+            $items = $event->getItems();
+
+            /**
+             * @var $item CartLoad\Cart\Container
+             */
+            $cart = $event->getCart();
+
+            //-- Push an error but nothing will be stopped....
+            $event->addError(count($items) .' items have been captured WHAT will you do?', 'error');
+        });
+
         //-- This will fail to add to cart
         $item = Item::make([
             'id' => 1,
@@ -129,6 +148,96 @@ class CartContainerTest extends \Codeception\Test\Unit
         $this->assertEquals('Sorry there are only 10 items in stock!', $item->getErrors()[0]);
 
 
+    }
 
+    public function testCartDeleteEvent()
+    {
+        $repository = new \CartLoad\Cart\Repositories\ArrayRepository();
+        $cart = new Container($repository);
+
+        $item = Item::make([
+            'id' => 1,
+            'product_id' => 1,
+            'qty' => 100,
+        ]);
+        $item2 = Item::make([
+            'id' => 2,
+            'product_id' => 2,
+            'qty' => 10,
+        ]);
+        $added = $cart->addItem($item);
+
+        //-- Delete item
+        $deleted = $cart->deleteItem($item);
+        $items = $cart->getItems();
+
+        $this->assertEquals(true, $deleted);
+        $this->assertEquals(0, count($items));
+
+        $added = $cart->addItem($item);
+        $added2 = $cart->addItem($item2);
+
+        //-- Test deleting an item that does not exist
+        $deleted = $cart->deleteItem(Item::make([]));
+        $items = $cart->getItems();
+
+        $this->assertEquals(false, $deleted);
+        $this->assertEquals(2, count($items));
+
+        //-- Lets test deleting an item with its delete feature being blocked,
+        // by the listener
+
+        //-- Add the event listener
+        $cart->addListener(CartDeleteItemBeforeEvent::NAME, function (CartDeleteItemBeforeEvent $event) {
+            /**
+             * @var $item CartLoad\Cart\Item
+             */
+            $item = $event->getItem();
+
+            /**
+             * @var $item CartLoad\Cart\Container
+             */
+            $cart = $event->getCart();
+
+            if ($item->getId() === 1) {
+                $event->addError('You are not allowed to delete this item', 'error');
+            }
+        });
+
+        //-- Add the event listener
+        $cart->addListener(CartDeleteItemAfterEvent::NAME, function (CartDeleteItemAfterEvent $event) {
+            /**
+             * @var $item CartLoad\Cart\Item
+             */
+            $item = $event->getItem();
+
+            /**
+             * @var $item CartLoad\Cart\Container
+             */
+            $cart = $event->getCart();
+
+            $error = 'You deleted this item... beware!!!';
+            if ($item->getId() === 2) {
+                //-- This will not stop the item from being deleted, but will still show an error
+                $event->addError($error, 'error');
+            }
+
+
+            $this->assertEquals(true, $event->hasError('error'));
+            $this->assertEquals($error, $event->getErrorByKey('error'));
+            $this->assertEquals(false, $event->getErrorByKey('error2'));
+        });
+
+        //-- Delete item - this will fail
+        $deleted = $cart->deleteItem($item);
+        $items = $cart->getItems();
+        $this->assertEquals(false, $deleted);
+        $this->assertEquals(2, count($items));
+
+        //-- Delete item - this will succeed
+        $deleted = $cart->deleteItem($item2);
+        $items = $cart->getItems();
+        $this->assertEquals(true, $deleted);
+        $this->assertEquals(1, count($items));
     }
 }

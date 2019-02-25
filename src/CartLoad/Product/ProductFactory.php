@@ -42,6 +42,7 @@ class ProductFactory
                         return new VariationSet($variation_set);
                     }, $value);
                     $product->setVariations($variation_sets);
+                    break;
                 case 'combinations':
                     /**
                      * @var Combination[]
@@ -50,6 +51,7 @@ class ProductFactory
                         return (new CombinationFactory())->make($combination_data);
                     }, $value);
                     $product->setCombinations($combinations);
+                    break;
             }
         }
 

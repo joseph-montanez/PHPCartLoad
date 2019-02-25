@@ -10,15 +10,23 @@
     }
   ],
   "require": {
-    "php": ">=5.5.9",
-    "symfony/event-dispatcher": "3.4.9"
+    "php": ">=7.0",
+    "symfony/event-dispatcher": "4.2"
   },
   "require-dev": {
-    "codeception/codeception": "2.3.9"
+    "codeception/codeception": "2.5.4",
+    "phpstan/phpstan": "0.11.2",
+    "phpmd/phpmd": "2.6.0",
+    "phpmetrics/phpmetrics": "2.4.1"
   },
   "autoload": {
     "psr-4": {
       "CartLoad\\": "src/CartLoad"
     }
+  },
+  "scripts": {
+    "test": [
+      "@php -dextension=/Applications/MAMP/bin/php/php7.2.10/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so vendor/bin/codecept --coverage --coverage-xml --coverage-html"
+    ]
   }
 }

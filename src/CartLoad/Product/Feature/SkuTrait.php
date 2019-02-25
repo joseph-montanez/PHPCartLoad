@@ -74,12 +74,12 @@ trait SkuTrait
                 if (isset($value['sku']['sku'])) {
                     $this->setSku($value['sku']['sku']);
                 }
-                if (isset($value['sku']['delimiter'])) {
+                if (in_array('delimiter', array_keys($value['sku']))) {
                     $this->setSkuDelimiter($value['sku']['delimiter']);
                 } else {
                     $this->setSkuDelimiter('-');
                 }
-                if (isset($value['sku']['effect'])) {
+                if (in_array('effect', array_keys($value['sku']))) {
                     $this->setSkuEffect($value['sku']['effect']);
                 } else {
                     $this->setSkuEffect(SkuInterface::SKU_END_OF);
