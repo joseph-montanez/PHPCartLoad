@@ -10,14 +10,14 @@
     }
   ],
   "require": {
-    "php": ">=7.0",
-    "symfony/event-dispatcher": "4.2"
+    "php": ">=8.0.3",
+    "symfony/event-dispatcher": "6.*"
   },
   "require-dev": {
     "codeception/codeception": "2.5.4",
-    "phpstan/phpstan": "0.11.2",
-    "phpmd/phpmd": "2.6.0",
-    "phpmetrics/phpmetrics": "2.4.1"
+    "phpstan/phpstan": "1.4.10",
+    "phpmd/phpmd": "2.11.1",
+    "phpmetrics/phpmetrics": "2.7.4"
   },
   "autoload": {
     "psr-4": {

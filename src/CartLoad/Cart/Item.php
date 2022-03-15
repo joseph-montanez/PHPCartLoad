@@ -212,7 +212,13 @@ class Item
         return (new SimpleFactory())->make($price);
     }
 
-    public function getPrice(Product $product, \DateTime $now = null)
+    /**
+     * @param \CartLoad\Product\Product $product
+     * @param \DateTime|null            $now
+     *
+     * @return float
+     */
+    public function getPrice(Product $product, \DateTime $now = null): float
     {
         $price = $this->getPriceInterface($product, $now);
         return $price->getPrice();
