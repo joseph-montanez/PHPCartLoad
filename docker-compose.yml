@@ -1,0 +1,6 @@
+services:
+  php80:
+    build:
+      dockerfile: docker/php80/Dockerfile
+    volumes:
+      - ./:/var/www/html

@@ -1,7 +1,7 @@
 {
   "name": "joseph-montanez/phpcartload",
   "description": "Standalone shopping cart",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "license": "MIT",
   "authors": [
     {
@@ -14,7 +14,7 @@
     "symfony/event-dispatcher": "6.*"
   },
   "require-dev": {
-    "codeception/codeception": "2.5.4",
+    "codeception/codeception": "5.*",
     "phpstan/phpstan": "1.4.10",
     "phpmd/phpmd": "2.11.1",
     "phpmetrics/phpmetrics": "2.7.4"
