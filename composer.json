@@ -17,7 +17,9 @@
     "codeception/codeception": "5.*",
     "phpstan/phpstan": "1.4.10",
     "phpmd/phpmd": "2.11.1",
-    "phpmetrics/phpmetrics": "2.7.4"
+    "phpmetrics/phpmetrics": "2.7.4",
+    "codeception/module-phpbrowser": "dev-master",
+    "codeception/module-asserts": "dev-master"
   },
   "autoload": {
     "psr-4": {

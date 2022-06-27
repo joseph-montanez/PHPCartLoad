@@ -8,10 +8,9 @@
 
 namespace CartLoad\Product;
 
-
 use CartLoad\Product\Price\Simple;
 
-class PriceTableFactoryTest extends \PHPUnit_Framework_TestCase
+class PriceTableFactoryTest extends \Codeception\Test\Unit
 {
 
     public function testMakeFloats()

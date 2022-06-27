@@ -1,21 +1,32 @@
-actor: Tester
-paths:
-    tests: tests
-    log: tests/_output
-    data: tests/_data
-    support: tests/_support
-    envs: tests/_envs
+namespace: Tests
+support_namespace: Support
+suites:
+    unit:
+        actor: UnitTester
+        path: unit
+
 settings:
     bootstrap: _bootstrap.php
-    colors: true
+    shuffle: false
+    lint: true
+    disallow_test_output: true
+    error_level: E_ALL
+    log_incomplete_skipped: true
+    report_useless_tests: true
     memory_limit: 1024M
+paths:
+    tests: tests
+    output: tests/_output
+    support: tests/Support
+    data: tests
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
-modules:
-    config:
-        Db:
-            dsn: ''
-            user: ''
-            password: ''
-            dump: tests/_data/dump.sql
+coverage:
+    enabled: true
+    include:
+        - src/*
+    show_uncovered: true
+reporters:
+    report: "PhpStorm_Codeception_ReportPrinter"
+     

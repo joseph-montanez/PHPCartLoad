@@ -18,12 +18,12 @@ class Container
     /**
      * @var EventDispatcher
      */
-    protected $dispatcher;
+    protected EventDispatcher $dispatcher;
 
     /**
-     * @var RepositoryInterface
+     * @var RepositoryInterface|null
      */
-    protected $repository = null;
+    protected ?RepositoryInterface $repository = null;
 
     public function __construct(RepositoryInterface $repository = null)
     {
@@ -37,7 +37,7 @@ class Container
      * @param $event_callable
      * @param int $priority
      */
-    public function addListener($event_name, $event_callable, $priority = 0)
+    public function addListener($event_name, $event_callable, int $priority = 0): void
     {
         $this->dispatcher->addListener($event_name, $event_callable, $priority);
     }
@@ -50,7 +50,7 @@ class Container
     public function addItem(Item $item)
     {
         $event = new CartAddItemBeforeEvent($this, $item);
-        $this->dispatcher->dispatch(CartAddItemBeforeEvent::NAME, $event);
+        $this->dispatcher->dispatch($event, CartAddItemBeforeEvent::NAME);
 
         if ($event->hasErrors()) {
             $this->addErrors($event->getErrors());
@@ -68,14 +68,14 @@ class Container
     /**
      * @return Item[]
      */
-    public function getItems()
+    public function getItems() : array
     {
         $items = [];
 
         //-- Call get item event
         foreach ($this->repository->getItems() as $item) {
             $event = new CartGetItemAfterEvent($this, $item);
-            $this->dispatcher->dispatch(CartGetItemAfterEvent::NAME, $event);
+            $this->dispatcher->dispatch($event, CartGetItemAfterEvent::NAME);
 
 
             if ($event->hasErrors()) {
@@ -88,7 +88,7 @@ class Container
 
         //-- Call get items event
         $event = new CartGetItemsAfterEvent($this, $this->repository->getItems());
-        $this->dispatcher->dispatch(CartGetItemsAfterEvent::NAME, $event);
+        $this->dispatcher->dispatch($event, CartGetItemsAfterEvent::NAME);
 
         if ($event->hasErrors()) {
             $this->addErrors($event->getErrors());
@@ -120,7 +120,7 @@ class Container
     {
         //-- Call before delete items event
         $event = new CartDeleteItemBeforeEvent($this, $item);
-        $dispatchedEvent = $this->dispatcher->dispatch(CartDeleteItemBeforeEvent::NAME, $event);
+        $dispatchedEvent = $this->dispatcher->dispatch($event, CartDeleteItemBeforeEvent::NAME);
 
         //-- If some event stopped this delete function, return false
         if ($dispatchedEvent->isPropagationStopped()) {
@@ -131,7 +131,7 @@ class Container
 
         //-- Call before delete items event
         $event = new CartDeleteItemAfterEvent($this, $item);
-        $dispatchedEvent = $this->dispatcher->dispatch(CartDeleteItemAfterEvent::NAME, $event);
+        $dispatchedEvent = $this->dispatcher->dispatch($event, CartDeleteItemAfterEvent::NAME);
 
         return $results;
     }
@@ -142,9 +142,9 @@ class Container
     /**
      * Clears errors in container and its child items
      *
-     * @return $this
+     * @return static
      */
-    public function clearErrors()
+    public function clearErrors(): static
     {
         $this->errors = [];
 
@@ -160,9 +160,9 @@ class Container
     }
 
     /**
-     * @return RepositoryInterface
+     * @return \CartLoad\Cart\RepositoryInterface|null
      */
-    public function getRepository()
+    public function getRepository(): ?RepositoryInterface
     {
         return $this->repository;
     }
@@ -170,9 +170,9 @@ class Container
     /**
      * @param RepositoryInterface $repository
      *
-     * @return Container
+     * @return static
      */
-    public function setRepository($repository)
+    public function setRepository(RepositoryInterface $repository): static
     {
         $this->repository = $repository;
 
