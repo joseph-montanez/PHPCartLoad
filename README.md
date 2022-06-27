@@ -23,7 +23,7 @@ This is still alpha and undergoing changes for a better API. The following is to
  - Consider multi-currency, multi-lingual support
  - Stock API
    - In Stock
-   - Drop Shipped
+   - Drop-Shipped
    - Back Ordered (Including support for limiting to the amount back ordered)
  - Shipping API
    - Initial Support For USPS
@@ -40,7 +40,7 @@ Here are some examples of what is current available in the library.
  - [Bulk Pricing](#bulk-pricing)
  - [SKU Variations](#sku-variations)
  - [Combinations](#combinations)
- - [Cart Events](#cart)
+ - [Cart Events](#cart-events)
 
 ### Simple Pricing
 

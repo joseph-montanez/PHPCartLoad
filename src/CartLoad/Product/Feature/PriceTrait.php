@@ -2,8 +2,8 @@
 
 trait PriceTrait
 {
-    /** @var float $price */
-    protected $price;
+    /** @var float|null $price */
+    protected ?float $price;
 
     /** @var int $price_effect */
     protected $price_effect;
@@ -11,9 +11,9 @@ trait PriceTrait
     /**
      * @return float
      */
-    public function getPrice()
+    public function getPrice(): float
     {
-        return $this->price;
+        return $this->price ?? 0.00;
     }
 
     /**
@@ -21,7 +21,7 @@ trait PriceTrait
      *
      * @return self
      */
-    public function setPrice($price)
+    public function setPrice($price): static
     {
         $this->price = $price;
 

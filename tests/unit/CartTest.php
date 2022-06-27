@@ -1,12 +1,16 @@
 <?php
+
+namespace CartLoad\Tests\unit;
+
 use CartLoad\Cart\Item;
 use CartLoad\Product\Product;
+use Tests\Support\UnitTester;
 
 
 class CartTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 

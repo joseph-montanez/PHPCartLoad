@@ -1,5 +1,7 @@
 <?php
 
+namespace CartLoad\Tests\unit;
+
 use CartLoad\Cart\Container;
 use CartLoad\Cart\Events\CartAddItemBeforeEvent;
 use CartLoad\Cart\Events\CartDeleteItemAfterEvent;
@@ -8,11 +10,12 @@ use CartLoad\Cart\Events\CartGetItemAfterEvent;
 use CartLoad\Cart\Events\CartGetItemsAfterEvent;
 use CartLoad\Cart\Item;
 use CartLoad\Cart\Repositories\SessionRepository;
+use Tests\Support\UnitTester;
 
-class CartContainerSessionRepositoryTest extends \Codeception\Test\Unit
+class CartContainerSessionRepoTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 

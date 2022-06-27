@@ -7,6 +7,7 @@ use CartLoad\Product\Feature\PriceInterface;
 use CartLoad\Product\Feature\SkuInterface;
 use CartLoad\Product\Price\SimpleFactory;
 use CartLoad\Product\Product;
+use DateTime;
 
 class Item
 {
@@ -161,11 +162,11 @@ class Item
 
     /**
      * @param Product $product
-     * @param \DateTime $now
+     * @param DateTime|null $now
      * @return PriceInterface|null
      * @internal param $qty
      */
-    public function getPriceInterface(Product $product, \DateTime $now = null)
+    public function getPriceInterface(Product $product, DateTime $now = null): ?PriceInterface
     {
         //-- If this is a CartItem and the Product has a matching computed combination, then return the price from the
         // combination
@@ -214,11 +215,11 @@ class Item
 
     /**
      * @param \CartLoad\Product\Product $product
-     * @param \DateTime|null            $now
+     * @param DateTime|null            $now
      *
-     * @return float
+     * @return ?float
      */
-    public function getPrice(Product $product, \DateTime $now = null): float
+    public function getPrice(Product $product, DateTime $now = null): ?float
     {
         $price = $this->getPriceInterface($product, $now);
         return $price->getPrice();
@@ -227,10 +228,10 @@ class Item
 
     /**
      * @param Product $product
-     * @param \DateTime $now
+     * @param DateTime $now
      * @return string
      */
-    public function getSku(Product $product, \DateTime $now = null)
+    public function getSku(Product $product, DateTime $now = null)
     {
         $processor = new SkuProcessor();
         return $processor->getSku($this, $product, $now);

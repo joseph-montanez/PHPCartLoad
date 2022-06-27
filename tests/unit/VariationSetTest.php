@@ -1,5 +1,7 @@
 <?php
 
+namespace CartLoad\Tests\unit;
+
 use CartLoad\Product\Variation\VariationSet;
 
 class VariationSetTest extends \Codeception\Test\Unit
@@ -26,9 +28,9 @@ class VariationSetTest extends \Codeception\Test\Unit
         $this->assertEquals([], $set->calculateSkus(1));
 
         $set->setItems([
-            new CartLoad\Product\Variation\Variation(['id' => 1, 'name' => 'Small', 'price' => 0.5, 'sku' => 's']),
-            new CartLoad\Product\Variation\Variation(['id' => 2, 'name' => 'Medium', 'price' => 0.7, 'sku' => 'm']),
-            new CartLoad\Product\Variation\Variation(['id' => 3, 'name' => 'Large', 'price' => 1.0, 'sku' => 'l']),
+            new \CartLoad\Product\Variation\Variation(['id' => 1, 'name' => 'Small', 'price' => 0.5, 'sku' => 's']),
+            new \CartLoad\Product\Variation\Variation(['id' => 2, 'name' => 'Medium', 'price' => 0.7, 'sku' => 'm']),
+            new \CartLoad\Product\Variation\Variation(['id' => 3, 'name' => 'Large', 'price' => 1.0, 'sku' => 'l']),
         ]);
 
 

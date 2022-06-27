@@ -5,7 +5,8 @@ namespace CartLoad\Cart\Events;
 
 use CartLoad\Cart\Container;
 use CartLoad\Cart\Errors;
-use Symfony\Component\EventDispatcher\Event;
+use CartLoad\Cart\Item;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class CartGetItemsAfterEvent extends Event
 {
@@ -21,7 +22,7 @@ class CartGetItemsAfterEvent extends Event
     protected $cart;
 
     /**
-     * @var \CartLoad\Cart\Item[]
+     * @var Item[]
      */
     protected $items;
 
@@ -40,7 +41,7 @@ class CartGetItemsAfterEvent extends Event
     }
 
     /**
-     * @return \CartLoad\Cart\Item[]
+     * @return Item[]
      */
     public function getItems()
     {

@@ -1,10 +1,13 @@
 <?php
 
+namespace CartLoad\Tests\unit;
+
+use Tests\Support\UnitTester;
 
 class PriceTableTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 

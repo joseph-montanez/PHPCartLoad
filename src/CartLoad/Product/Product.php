@@ -31,9 +31,9 @@ class Product
      *
      * @param array $data
      * @param Product $product
-     * @return Product
+     * @return static
      */
-    public static function make(array $data = [], Product $product = null)
+    public static function make(array $data = [], Product $product = null): static
     {
         return (new ProductFactory())->make($data, $product);
     }

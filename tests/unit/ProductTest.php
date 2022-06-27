@@ -1,17 +1,19 @@
 <?php
 
+namespace CartLoad\Tests\unit;
+
 class ProductTest extends \Codeception\Test\Unit
 {
     public function testGetterSetters()
     {
-        $product = new CartLoad\Product\Product();
+        $product = new \CartLoad\Product\Product();
 
-        $variationSet = new CartLoad\Product\Variation\VariationSet();
+        $variationSet = new \CartLoad\Product\Variation\VariationSet();
         $variationSet->setId(2);
         $variationSet->setName('Size');
         $variationSet->setRequired(false);
         $variationSet->setItems([
-            new CartLoad\Product\Variation\Variation([
+            new \CartLoad\Product\Variation\Variation([
                 'id'       => 4,
                 'name'     => 'Small',
                 'price'    => 1.0,
@@ -19,7 +21,7 @@ class ProductTest extends \Codeception\Test\Unit
                 'required' => false,
                 'order'    => 1,
             ]),
-            new CartLoad\Product\Variation\Variation([
+            new \CartLoad\Product\Variation\Variation([
                 'id'       => 5,
                 'name'     => 'Medium',
                 'price'    => 1.1,
@@ -27,7 +29,7 @@ class ProductTest extends \Codeception\Test\Unit
                 'required' => false,
                 'order'    => 1,
             ]),
-            new CartLoad\Product\Variation\Variation([
+            new \CartLoad\Product\Variation\Variation([
                 'id'       => 6,
                 'name'     => 'Large',
                 'price'    => 1.2,

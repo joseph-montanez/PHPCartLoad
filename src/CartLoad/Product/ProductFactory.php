@@ -11,7 +11,7 @@ class ProductFactory
      * @param Product $product
      * @return Product
      */
-    public function make(array $data, Product $product = null)
+    public function make(array $data, Product $product = null): Product
     {
         if (is_null($product)) {
             $product = new Product();

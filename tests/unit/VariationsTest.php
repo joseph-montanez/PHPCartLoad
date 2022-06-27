@@ -1,15 +1,17 @@
 <?php
 
+namespace CartLoad\Tests\unit;
 
 use CartLoad\Cart\Item;
 use CartLoad\Product\Feature\PriceInterface;
 use CartLoad\Product\Feature\SkuInterface;
 use CartLoad\Product\Product;
+use Tests\Support\UnitTester;
 
 class VariationsTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 
@@ -79,7 +81,7 @@ class VariationsTest extends \Codeception\Test\Unit
     {
 
 
-        $variation = new CartLoad\Product\Variation\Variation();
+        $variation = new \CartLoad\Product\Variation\Variation();
         $variation->fromArray([
             'id' => 1,
             'name' => 'Red',

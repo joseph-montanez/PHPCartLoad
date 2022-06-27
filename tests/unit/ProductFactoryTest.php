@@ -1,5 +1,7 @@
 <?php
 
+namespace CartLoad\Tests\unit;
+
 class ProductFactoryTest extends \Codeception\Test\Unit
 {
     public function testWeight() {

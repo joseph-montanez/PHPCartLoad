@@ -1,5 +1,7 @@
 <?php
 
+namespace CartLoad\Tests\unit;
+
 use CartLoad\Cart\Container;
 use CartLoad\Cart\Events\CartAddItemBeforeEvent;
 use CartLoad\Cart\Events\CartDeleteItemAfterEvent;
@@ -7,11 +9,13 @@ use CartLoad\Cart\Events\CartDeleteItemBeforeEvent;
 use CartLoad\Cart\Events\CartGetItemAfterEvent;
 use CartLoad\Cart\Events\CartGetItemsAfterEvent;
 use CartLoad\Cart\Item;
+use CartLoad\Cart\Repositories\ArrayRepository;
+use Tests\Support\UnitTester;
 
 class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 
@@ -25,10 +29,10 @@ class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
 
     public function testAddBeforeEvent()
     {
-        $repository = new \CartLoad\Cart\Repositories\ArrayRepository();
+        $repository = new ArrayRepository();
         $cart = new Container($repository);
 
-        $this->assertEquals(true, $cart->getRepository() instanceof \CartLoad\Cart\Repositories\ArrayRepository);
+        $this->assertEquals(true, $cart->getRepository() instanceof ArrayRepository);
 
         //-- Add the event listener
         $cart->addListener(CartAddItemBeforeEvent::NAME, function (CartAddItemBeforeEvent $event) {
@@ -50,7 +54,7 @@ class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
         $added = $cart->addItem($item);
 
         $this->assertFalse($added);
-        $this->assertEquals(0, count($cart->getItems()));
+        $this->assertCount(0, $cart->getItems());
         $this->assertEquals('Sorry the limit is 2 per customer', $cart->getErrors()[0]);
 
 
@@ -67,15 +71,15 @@ class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
 
     public function testGetAfterEvent()
     {
-        $repository = new \CartLoad\Cart\Repositories\ArrayRepository();
+        $repository = new ArrayRepository();
         $cart = new Container($repository);
 
-        $this->assertEquals(true, $cart->getRepository() instanceof \CartLoad\Cart\Repositories\ArrayRepository);
+        $this->assertEquals(true, $cart->getRepository() instanceof ArrayRepository);
 
         //-- Add the event listener
         $cart->addListener(CartGetItemAfterEvent::NAME, function (CartGetItemAfterEvent $event) {
             /**
-             * @var $item CartLoad\Cart\Item
+             * @var $item \CartLoad\Cart\Item
              */
             $item = $event->getItem();
 
@@ -86,12 +90,12 @@ class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
 
         $cart->addListener(CartGetItemAfterEvent::NAME, function (CartGetItemAfterEvent $event) {
             /**
-             * @var $cart CartLoad\Cart\Container
+             * @var $cart \CartLoad\Cart\Container
              */
             $cart = $event->getCart();
 
             /**
-             * @var $item CartLoad\Cart\Item
+             * @var $item \CartLoad\Cart\Item
              */
             $item = $event->getItem();
 
@@ -105,12 +109,12 @@ class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
         //-- Add the event listener
         $cart->addListener(CartGetItemsAfterEvent::NAME, function (CartGetItemsAfterEvent $event) {
             /**
-             * @var $item CartLoad\Cart\Item
+             * @var $item \CartLoad\Cart\Item
              */
             $items = $event->getItems();
 
             /**
-             * @var $item CartLoad\Cart\Container
+             * @var $item \CartLoad\Cart\Container
              */
             $cart = $event->getCart();
 
@@ -152,7 +156,7 @@ class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
 
     public function testCartDeleteEvent()
     {
-        $repository = new \CartLoad\Cart\Repositories\ArrayRepository();
+        $repository = new ArrayRepository();
         $cart = new Container($repository);
 
         $item = Item::make([
@@ -190,12 +194,12 @@ class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
         //-- Add the event listener
         $cart->addListener(CartDeleteItemBeforeEvent::NAME, function (CartDeleteItemBeforeEvent $event) {
             /**
-             * @var $item CartLoad\Cart\Item
+             * @var $item \CartLoad\Cart\Item
              */
             $item = $event->getItem();
 
             /**
-             * @var $item CartLoad\Cart\Container
+             * @var $item \CartLoad\Cart\Container
              */
             $cart = $event->getCart();
 
@@ -207,12 +211,12 @@ class CartContainerArrayRepositoryTest extends \Codeception\Test\Unit
         //-- Add the event listener
         $cart->addListener(CartDeleteItemAfterEvent::NAME, function (CartDeleteItemAfterEvent $event) {
             /**
-             * @var $item CartLoad\Cart\Item
+             * @var $item \CartLoad\Cart\Item
              */
             $item = $event->getItem();
 
             /**
-             * @var $item CartLoad\Cart\Container
+             * @var $item \CartLoad\Cart\Container
              */
             $cart = $event->getCart();
 

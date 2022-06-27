@@ -1,5 +1,7 @@
 <?php
 
+namespace CartLoad\Tests\unit;
+
 use CartLoad\Cart\Item;
 use CartLoad\Product\Product;
 

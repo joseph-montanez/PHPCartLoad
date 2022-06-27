@@ -85,9 +85,6 @@ $badAppleAdded = $container->addItem($cartBadAppleItem); //-- returns false
 
 if (!$badAppleAdded) {
     $errors = $container->getErrors();
-    // array(1) {
-    //    ["does-not-exist"]=> string(33) "Sorry this product "i do not exist" does not exist"
-    // }
 
     foreach ($errors as $key => $error) {
         echo '"', $key, '" - ', $error, PHP_EOL;

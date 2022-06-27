@@ -1,9 +1,13 @@
 <?php
 
+namespace CartLoad\Tests\unit;
+
+use DateTime;
+use Tests\Support\UnitTester;
 
 class MinMaxDateTest extends \Codeception\Test\Unit {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 
@@ -17,7 +21,7 @@ class MinMaxDateTest extends \Codeception\Test\Unit {
     public function testMe() {
         $min_date = new DateTime('2015-10-10');
         $max_date = new DateTime('2015-10-11');
-        $bulkPrice = new CartLoad\Product\Price\Bulk();
+        $bulkPrice = new \CartLoad\Product\Price\Bulk();
         $bulkPrice->setMinDate($min_date);
         $bulkPrice->setMaxDate($max_date);
         $bulkPrice->setNoMinimumDateLimit(TRUE);
@@ -32,7 +36,7 @@ class MinMaxDateTest extends \Codeception\Test\Unit {
 
     public function testNoMinMaxDate() {
         $now_date = new DateTime('2015-10-10');
-        $bulkPrice = new CartLoad\Product\Price\Bulk();
+        $bulkPrice = new \CartLoad\Product\Price\Bulk();
         $bulkPrice->setNoMaximumDateLimit(TRUE);
         $bulkPrice->setNoMinimumDateLimit(TRUE);
 
@@ -43,14 +47,14 @@ class MinMaxDateTest extends \Codeception\Test\Unit {
     public function testNoMaxDate() {
         $min_date = new DateTime('2015-10-10');
         $now_date = new DateTime('2015-10-10');
-        $bulkPrice = new CartLoad\Product\Price\Bulk();
+        $bulkPrice = new \CartLoad\Product\Price\Bulk();
         $bulkPrice->setNoMaximumDateLimit(TRUE);
         $bulkPrice->setMinDate($min_date);
 
         //-- Now is within range
         $this->assertEquals(TRUE, $bulkPrice->inMinMaxDateRange($now_date));
 
-        //-- Min date is after now so its not within range
+        //-- Min date is after now, so it's not within range
         $min_date->setDate(2015, 10, 11);
         $this->assertEquals(FALSE, $bulkPrice->inMinMaxDateRange($now_date));
 
@@ -62,14 +66,14 @@ class MinMaxDateTest extends \Codeception\Test\Unit {
     public function testNoMinDate() {
         $max_date = new DateTime('2015-10-10');
         $now_date = new DateTime('2015-10-10');
-        $bulkPrice = new CartLoad\Product\Price\Bulk();
+        $bulkPrice = new \CartLoad\Product\Price\Bulk();
         $bulkPrice->setNoMinimumDateLimit(TRUE);
         $bulkPrice->setMaxDate($max_date);
 
         //-- Now is within range
         $this->assertEquals(TRUE, $bulkPrice->inMinMaxDateRange($now_date));
 
-        //-- Max date is before now so its not within range
+        //-- Max date is before now, so it's not within range
         $max_date->setDate(2015, 10, 9);
         $this->assertEquals(FALSE, $bulkPrice->inMinMaxDateRange($now_date));
 
@@ -82,14 +86,14 @@ class MinMaxDateTest extends \Codeception\Test\Unit {
         $min_date = new DateTime('2015-10-10');
         $max_date = new DateTime('2015-10-20');
         $now_date = new DateTime('2015-10-15');
-        $bulkPrice = new CartLoad\Product\Price\Bulk();
+        $bulkPrice = new \CartLoad\Product\Price\Bulk();
         $bulkPrice->setMinDate($min_date);
         $bulkPrice->setMaxDate($max_date);
 
         //-- Now is within range
         $this->assertEquals(TRUE, $bulkPrice->inMinMaxDateRange($now_date));
 
-        //-- Max date is before now so its not within range
+        //-- Max date is before now, so it's not within range
         $min_date->setDate(2015, 10, 16);
         $this->assertEquals(FALSE, $bulkPrice->inMinMaxDateRange($now_date));
 

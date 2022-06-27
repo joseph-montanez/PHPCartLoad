@@ -5,7 +5,7 @@ namespace CartLoad\Cart\Events;
 use CartLoad\Cart\Container;
 use CartLoad\Cart\Item;
 use CartLoad\Cart\Errors;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class CartDeleteItemBeforeEvent extends Event
 {

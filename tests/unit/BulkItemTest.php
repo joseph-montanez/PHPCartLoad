@@ -1,11 +1,16 @@
 <?php
+
+namespace CartLoad\Tests\unit;
+
 use CartLoad\Cart\Item;
 use CartLoad\Product\Product;
+use Tests\Support\UnitTester;
+
 
 class BulkItemTest extends \Codeception\Test\Unit
 {
     /**
-     * @var \UnitTester
+     * @var UnitTester
      */
     protected $tester;
 
@@ -128,8 +133,8 @@ class BulkItemTest extends \Codeception\Test\Unit
             'name' => 'Apple',
             'sku' => 'a',
             'price' => [
-                ['CustomBulk' => ['min_qty' => 1, 'max_qty' => 9, 'price' => 4.95]],
-                ['CustomBulk' => ['min_qty' => 10, 'max_qty' => 19, 'price' => 3.95]],
+                [CustomBulk::class => ['min_qty' => 1, 'max_qty' => 9, 'price' => 4.95]],
+                [CustomBulk::class => ['min_qty' => 10, 'max_qty' => 19, 'price' => 3.95]],
             ]
         ]);
 
@@ -154,7 +159,7 @@ class CustomBulk extends \CartLoad\Product\Price\Bulk {
     /**
      * @return float
      */
-    public function getPrice() {
+    public function getPrice(): float {
         return $this->basePrice + $this->price;
     }
     

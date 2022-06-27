@@ -1,5 +1,10 @@
 <?php
 
+namespace Tests\Support;
+
+use Tests\Support\_generated\UnitTesterActions;
+
+//require_once __DIR__ . '/_generated/UnitTesterActions.php';
 
 /**
  * Inherited Methods
@@ -18,7 +23,7 @@
 */
 class UnitTester extends \Codeception\Actor
 {
-    use _generated\UnitTesterActions;
+    use UnitTesterActions;
 
    /**
     * Define custom actions here

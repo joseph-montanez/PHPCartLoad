@@ -14,7 +14,7 @@ class PriceTable
     protected $prices;
 
     /**
-     * If this will allow multiple prices to be returned or not
+     * If this allows multiple prices to be returned or not
      * @var bool $undefined_behavior
      */
     protected $undefined_behavior;

@@ -1,17 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: josephmontanez
- * Date: 5/14/18
- * Time: 11:12 PM
- */
 
-namespace CartLoad\Product;
-
+namespace CartLoad\Tests\unit;
 
 use CartLoad\Product\Price\Simple;
+use CartLoad\Product\PriceTableFactory;
 
-class PriceTableFactoryTest extends \PHPUnit_Framework_TestCase
+class PriceTableFactoryTest extends \Codeception\Test\Unit
 {
 
     public function testMakeFloats()
